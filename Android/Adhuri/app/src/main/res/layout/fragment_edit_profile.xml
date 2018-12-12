@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:orientation="vertical" android:background="@color/white">
+
+    <include
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        layout="@layout/toolbar_tags"/>
+
+    <RelativeLayout
+        android:layout_width="108sp" android:layout_height="108sp"
+        android:layout_gravity="center_horizontal" android:layout_marginTop="24sp">
+        <include
+            layout="@layout/circular_image_view_108" android:id="@+id/iProfilePic"
+            android:layout_width="match_parent" android:layout_height="match_parent"/>
+        <ImageView
+            android:layout_width="24sp" android:layout_height="24sp"
+            android:id="@+id/ivAddProfilePic" android:layout_centerInParent="true"
+            android:background="@drawable/icon_add" android:backgroundTint="@color/blueTint"
+            android:layout_marginTop="47sp" android:layout_marginLeft="47sp"/>
+    </RelativeLayout>
+
+</LinearLayout>

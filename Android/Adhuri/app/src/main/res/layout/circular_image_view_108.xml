@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cvCircularImage" android:foreground="@drawable/circular_image_view_72_background"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    app:cardCornerRadius="54sp">
+    <ImageView
+        android:layout_width="match_parent" android:layout_height="match_parent"
+        android:id="@+id/ivCircularImage" android:scaleType="centerCrop"
+        android:background="@drawable/profilepicture1"/>
+    </android.support.v7.widget.CardView>

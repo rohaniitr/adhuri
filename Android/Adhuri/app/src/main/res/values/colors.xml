@@ -1,6 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorPrimary">#000000</color>
+    <color name="colorPrimaryDark">#000000</color>
+    <color name="colorAccent">#000000</color>
+
+    <!--Standard color-->
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="offBlack">#444444</color>
+    <color name="offWhite">#BBBBBB</color>
+    <color name="alphaBlack">#33888888</color>
+    <color name="blueTint">#557397</color>
+
+    <!--Toolbar-->
+    <color name="toolbarBg">#000000</color>
+    <color name="toolbarIconTint">#DDDDDD</color>
+    <color name="transparentToolbar">#00FFFFFF</color>
+
+    <!--Bottom bar-->
+    <color name="bottomFocus">#000000</color>
+    <color name="bottomUnfocus">#bbbbbb</color>
+    <color name="bottomSeparator">#44555555</color>
+
+    <!--Profile-->
+    <color name="coverForeground">#88000000</color>
+    <color name="circularOuter">#FFFFFF</color>
+    <color name="circularInner">#000000</color>
+
+    <!--Text colors-->
+    <color name="textBlack">#000000</color>
+    <color name="textOffBlack">#888888</color>
+    <color name="textWhite">#CCCCCC</color>
+    <color name="textPureWhite">#EEEEEE</color>
+    <color name="textBio">#555555</color>
+    <color name="textSuggestion">#333333</color>
+
+    <color name="recyclerBg">#DDDEE3</color>
+
 </resources>

@@ -15,10 +15,10 @@ router.post('/login', function(req,res){
   if(!req.body.email || !req.body.password){
      return res.status(401).send({ auth: false, message: 'Sorry, you provided wrong info' });
   }
-  
+
   //Login & Create new session
   Users.findOne({email : req.body.email}, function(err,userData){
-    if(err)
+    if(err || !userData)
       return res.status(500).send("There was a problem finding the user.");
     else {
       bcrypt.compare(req.body.password, userData.password, function(err,result){
@@ -30,9 +30,18 @@ router.post('/login', function(req,res){
         else{
           //Login successful. Create a token.
           var token = jwt.sign({ id: userData._id }, config.secret, {
-            expiresIn: 2678400 // expiry time in seconds
+            expiresIn: 16000000 // expiry time in seconds ~ 6months
           });
-          res.status(200).send({ auth: true, token: token });
+          res.status(200).send({
+            auth: true,
+            token: token,
+            name: userData.name,
+            email: userData.email,
+            bio: userData.bio,
+            image: userData.image,
+            gender: userData.image,
+            tags: userData.tags
+          });
         }
       });
     }
@@ -56,7 +65,7 @@ router.post('/register', function(req, res){
        if(err)
           return res.status(500).send('Database error\n' + err);
 
-        res.status(200).send({message : 'New person added'});
+        res.status(200).send(true);
     });
 });
 

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white">
+
+    <include
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:id="@+id/toolbar" layout="@layout/toolbar_post"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:id="@+id/lUserDetails" android:layout_below="@+id/toolbar"
+        android:layout_marginLeft="12sp" android:layout_marginRight="12sp" android:layout_marginTop="12sp">
+        <include
+            android:layout_height="40sp" android:layout_width="40sp"
+            layout="@layout/circular_image_view_40" android:id="@+id/lProfilePic"/>
+        <LinearLayout
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="vertical" android:layout_gravity="center_vertical"
+            android:layout_marginLeft="16sp" android:layout_toRightOf="@+id/lProfilePic">
+            <TextView
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:id="@+id/tvName" android:text="@string/sample_name1"
+                android:textSize="16sp" android:textColor="@color/textBlack"/>
+            <TextView
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:id="@+id/tvTime"
+                android:textColor="@color/textOffBlack" android:textSize="12sp"
+                android:text="@string/sample_time"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:textColor="@color/textBlack" android:textSize="16sp"
+        android:id="@+id/tvContent" android:layout_below="@id/lUserDetails"
+        android:layout_marginLeft="18sp" android:layout_marginRight="18sp"
+        android:layout_marginTop="12sp" android:layout_marginBottom="12sp"
+        android:text="@string/samples_content_3"/>
+
+    <ImageView
+        android:layout_width="match_parent" android:layout_height="1sp"
+        android:id="@+id/ivContentDivider" android:layout_below="@id/tvContent"
+        android:background="@color/alphaBlack"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:id="@+id/rvSuggestion" android:paddingTop="8sp"
+        android:layout_below="@id/ivContentDivider" android:layout_above="@+id/ivSuggestionDivider"/>
+
+    <ImageView
+        android:layout_width="match_parent" android:layout_height="1sp"
+        android:id="@+id/ivSuggestionDivider" android:layout_above="@id/lSuggestion"
+        android:background="@color/alphaBlack" />
+
+    <RelativeLayout
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginBottom="8sp" android:layout_marginLeft="12sp"
+        android:layout_marginRight="12sp" android:layout_marginTop="8sp"
+        android:id="@+id/lSuggestion" android:layout_alignParentBottom="true">
+        <EditText
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:id="@+id/etSuggestion" android:layout_toLeftOf="@+id/fabAddSuggestion"
+            android:textColor="@color/textBlack" android:textSize="15sp"
+            android:singleLine="false" android:maxLines="4"
+            android:hint="@string/suggestion_hint" android:inputType="textMultiLine|textCapSentences"/>
+        <android.support.design.widget.FloatingActionButton
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            app:fabSize="mini" android:background="@drawable/button_submit"
+            android:src="@drawable/icon_send" android:tint="@color/white"
+            android:id="@+id/fabAddSuggestion" android:layout_alignParentRight="true"
+            app:elevation="0sp" android:layout_centerVertical="true"/>
+    </RelativeLayout>
+
+</RelativeLayout>

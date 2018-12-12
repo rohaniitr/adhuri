@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical" android:background="@color/white">
+
+    <include
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        layout="@layout/toolbar_tags" android:id="@+id/toolbar"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent" android:layout_height="match_parent"
+        android:id="@+id/rvTag" android:paddingTop="8sp"
+        android:layout_below="@+id/toolbar" android:layout_above="@+id/bSubmit"/>
+
+    <Button
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:id="@+id/bSubmit" android:layout_alignParentBottom="true"
+        android:textColor="@color/textWhite" android:textSize="16sp"
+        android:textAllCaps="true" android:text="@string/submit"
+        android:background="@drawable/button_submit"/>
+
+</RelativeLayout>

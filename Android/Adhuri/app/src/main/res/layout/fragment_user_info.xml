@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:background="@color/white" android:orientation="vertical">
+
+    <include
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        layout="@layout/toolbar_user_info"/>
+
+    <ScrollView
+        android:layout_width="match_parent" android:layout_height="match_parent"  >
+        <LinearLayout
+            android:layout_width="match_parent" android:layout_height="match_parent"
+            android:layout_marginLeft="12sp" android:layout_marginRight="12sp"
+            android:orientation="vertical">
+
+            <include
+                android:layout_width="108sp" android:layout_height="108sp"
+                layout="@layout/circular_image_view_108" android:layout_marginTop="12sp"
+                android:layout_gravity="center_horizontal" />
+
+            <TextView
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:id="@+id/tvChangePhoto" android:text="@string/change_photo"
+                android:textSize="14sp" android:textColor="@color/blueTint"
+                android:layout_marginTop="8sp" android:layout_gravity="center_horizontal"/>
+
+            <LinearLayout
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal" android:layout_marginTop="16sp">
+                <ImageView
+                    android:layout_width="16sp" android:layout_height="16sp"
+                    android:background="@drawable/icon_person" android:backgroundTint="@color/black"/>
+                <TextView
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:textSize="12sp" android:textColor="@color/textOffBlack"
+                    android:text="@string/name" android:layout_marginLeft="12sp"/>
+            </LinearLayout>
+
+            <EditText
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:textSize="16sp" android:textColor="@color/textBlack"
+                android:id="@+id/etEmail" android:inputType="textCapWords"
+                android:layout_marginLeft="28sp" android:layout_marginBottom="12sp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+                <ImageView
+                    android:layout_width="16sp" android:layout_height="16sp"
+                    android:background="@drawable/icon_gender" android:backgroundTint="@color/black"/>
+                <TextView
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:textSize="12sp" android:textColor="@color/textOffBlack"
+                    android:text="@string/gender" android:layout_marginLeft="12sp"/>
+            </LinearLayout>
+
+            <Spinner
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:id="@+id/sGender" android:layout_marginLeft="24sp"
+                android:layout_marginBottom="12sp" android:layout_marginTop="8sp"/>
+            <!--<EditText-->
+                <!--android:layout_width="match_parent" android:layout_height="wrap_content"-->
+                <!--android:textSize="16sp" android:textColor="@color/textBlack"-->
+                <!--android:id="@+id/etGender" android:inputType="textCapSentences"-->
+                <!--android:layout_marginLeft="28sp" android:layout_marginBottom="12sp"/>-->
+
+            <LinearLayout
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+                <ImageView
+                    android:layout_width="16sp" android:layout_height="16sp"
+                    android:background="@drawable/icon_edit" android:backgroundTint="@color/black"/>
+                <TextView
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:textSize="12sp" android:textColor="@color/textOffBlack"
+                    android:text="@string/bio" android:layout_marginLeft="12sp"/>
+            </LinearLayout>
+
+            <EditText
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:textSize="16sp" android:textColor="@color/textBlack"
+                android:id="@+id/etBio" android:inputType="textCapSentences|textMultiLine"
+                android:layout_marginLeft="28sp" android:layout_marginBottom="24sp"
+                android:singleLine="false" />
+
+            <Button
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:id="@+id/bSave" android:background="@drawable/button_submit"
+                android:text="@string/save" android:textAllCaps="true"
+                android:textColor="@color/textWhite" android:textSize="15sp"/>
+
+            <Button
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:id="@+id/bLogout" android:background="@drawable/button_submit"
+                android:text="@string/logout" android:textAllCaps="true"
+                android:textColor="@color/textWhite" android:textSize="15sp"
+                android:layout_marginTop="16sp"/>
+
+            <Button
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:id="@+id/bDeleteAccount" android:background="@drawable/button_submit"
+                android:text="@string/delete_account" android:textAllCaps="true"
+                android:textColor="@color/textWhite" android:textSize="15sp"
+                android:layout_marginTop="16sp" android:layout_marginBottom="16sp"/>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

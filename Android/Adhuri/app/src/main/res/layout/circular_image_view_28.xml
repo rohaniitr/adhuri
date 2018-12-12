@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cvCircularImage" android:foreground="@drawable/circular_image_view_28_background"
+    android:layout_width="28sp" android:layout_height="28sp"
+    app:cardCornerRadius="14sp">
+    <ImageView
+        android:layout_width="28sp" android:layout_height="28sp"
+        android:id="@+id/ivCircularImage" android:scaleType="centerCrop"/>
+</android.support.v7.widget.CardView>

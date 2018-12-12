@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <include
+        android:layout_height="wrap_content" android:layout_width="match_parent"
+        layout="@layout/toolbar_feed" android:id="@+id/toolbar"/>
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tlPost" android:layout_below="@id/toolbar"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        app:tabIndicatorColor="@android:color/white" app:tabSelectedTextColor="@android:color/white"
+        app:tabTextColor="@color/textWhite" android:background="@color/black"/>
+
+    <android.support.v4.view.ViewPager
+        android:layout_width="match_parent" android:layout_height="match_parent"
+        android:id="@+id/vpPost" android:layout_below="@id/tlPost"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="64sp" android:layout_height="64sp"
+        android:background="@drawable/button_submit" android:id="@+id/fabAddPost"
+        android:src="@drawable/icon_add" android:tint="@color/white"
+        android:layout_alignParentBottom="true" android:layout_marginBottom="16sp"
+        android:layout_alignParentRight="true" android:layout_marginRight="16sp"/>
+
+</RelativeLayout>

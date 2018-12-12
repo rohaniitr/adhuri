@@ -1,3 +1,56 @@
 <resources>
     <string name="app_name">Adhuri</string>
+    <string name="tags">Tags</string>
+    <string name="feed">Feed</string>
+    <string name="close_post">Close Post</string>
+    <string name="open_post">Open Post</string>
+    <string name="profile">Profile</string>
+    <string name="suggestion">Suggestion</string>
+    <string name="clipboard_label">Text for Closing Post</string>
+    <string name="submit">Submit</string>
+    <string name="save">Save</string>
+    <string name="open_posts">"Open Posts"</string>
+    <string name="close_posts">"Close Posts"</string>
+    <string name="name">"Name"</string>
+    <string name="bio">"Bio"</string>
+    <string name="gender">"Gender"</string>
+    <string name="login">"Login"</string>
+    <string name="logout">"Logout"</string>
+    <string name="register">"Register"</string>
+    <string name="delete_account">"Delete Account"</string>
+    <string name="change_photo">"Delete Account"</string>
+    <string name="edit_profile">"Edit Profile"</string>
+    <string name="add_post">"Add Post"</string>
+    <string name="add_suggestion">"Add Suggestion"</string>
+    <string name="no">"No"</string>
+    <string name="cancel">"Cancel"</string>
+    <string name="yes">"Yes"</string>
+
+    <string name="open_or_close">"Keep Post Open or Close?\nKeeping Post Open allows others to made Suggestions to your Post."</string>
+    <string name="your_thoughts">"Your thoughts here..."</string>
+    <string name="suggestion_hint">"Type your suggestion here..."</string>
+    <string name="add_suggestion_content">"Are you sure you want to add this Suggestion to your post?"</string>
+
+    <string name="login_text">ALREADY HAVE ACCOUNT? LOGIN</string>
+    <string name="register_text">NEW HERE? REGISTER</string>
+
+    <string name="samples_content_1">"हम समंदर है हमें खामोश रहने दो\nज़रा मचल गए तो शहर ले डूबेंग"</string>
+    <string name="samples_content_2">"Forever we remain oblivious to the future,\nlost to the past and enduring our torture.\nForever we take chances to settle our scores,\nlosing some battles and winning some wars"</string>
+    <string name="samples_content_3">"‘আমাদের গেছে যে দিন\nএকেবারেই কি গেছে –\nকিছুই কি নেই বাকি’\n\nএকটুকু রইলেম চুপ করে\nতার পর বললেম ,\n‘রাতের সব তারাই আছে\nদিনের আলোর গভীরে ।’"</string>
+    <string name="sample_tag">"Philosophy"</string>
+    <string name="sample_time">"13 Sep 2018 at 24:07"</string>
+    <string name="sample_suggestion_counts">"Suggested by Rishav \u0026 3 others"</string>
+    <string name="sample_suggestion">"Philosophy"</string>
+    <string name="sample_open_post_count">"12"</string>
+    <string name="sample_close_post_count">"35"</string>
+    <string name="sample_bio">"Fun loving guy!!!\nBorn on 3rd September\nPisces"</string>
+    <string name="sample_collaborators">" \u0026 2 others collaborated for this"</string>
+    <string name="sample_suggestors">"Richa Soni"</string>
+
+    <string name="sample_name1">"Rohan Sarkar"</string>
+    <string name="sample_name2">"Avantika Kole"</string>
+    <string name="sample_name3">"Sujoy Sarkar"</string>
+    <string name="sample_name4">"Bhavna Mallik"</string>
+    <string name="sample_name5">"Richa Soni"</string>
+
 </resources>
