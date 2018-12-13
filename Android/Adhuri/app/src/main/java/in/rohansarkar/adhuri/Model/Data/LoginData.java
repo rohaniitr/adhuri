@@ -3,7 +3,7 @@ package in.rohansarkar.adhuri.Model.Data;
 import java.util.ArrayList;
 
 public class LoginData {
-    private Boolean auth;
+    private Boolean success;
     private String name;
     private String token;
     private String email;

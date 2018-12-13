@@ -61,6 +61,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                 break;
             case R.id.bLogin:
                 viewModel.tryLogin(etEmail.getText().toString().trim(), etPassword.getText().toString().trim());
+//                goToHome();
                 break;
             case R.id.bRegister:
                 navController.navigate(R.id.action_loginFragment_to_registerFragment);
@@ -83,6 +84,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
         bLogin.setOnClickListener(this);
         bRegister.setOnClickListener(this);
         bForgotPass.setOnClickListener(this);
+
+        etEmail.setText("d@e.com");
+        etPassword.setText("somepassword");
     }
     private void observeViewModel(){
         viewModel.getLoginData().observe(this, new Observer<LoginData>() {

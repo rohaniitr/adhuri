@@ -18,7 +18,7 @@
     <string name="logout">"Logout"</string>
     <string name="register">"Register"</string>
     <string name="delete_account">"Delete Account"</string>
-    <string name="change_photo">"Delete Account"</string>
+    <string name="change_photo">"Change Picture"</string>
     <string name="edit_profile">"Edit Profile"</string>
     <string name="add_post">"Add Post"</string>
     <string name="add_suggestion">"Add Suggestion"</string>
