@@ -33,7 +33,7 @@ router.post('/login', function(req,res){
             expiresIn: 16000000 // expiry time in seconds ~ 6months
           });
           res.status(200).send({
-            auth: true,
+            success:true,
             token: token,
             name: userData.name,
             email: userData.email,
@@ -65,7 +65,9 @@ router.post('/register', function(req, res){
        if(err)
           return res.status(500).send('Database error\n' + err);
 
-        res.status(200).send(true);
+        res.status(200).json({
+          success:true
+        });
     });
 });
 

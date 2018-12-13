@@ -26,7 +26,9 @@ router.post('/updateDetail', function(req,res){
     if (!user)
       return res.status(404).json({message:"No user found."});
 
-    res.status(200).json({message:'User details updated.'});
+    res.status(200).json({
+      success:true
+    });
   });
 });
 
