@@ -6,6 +6,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -19,11 +20,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import in.rohansarkar.adhuri.Model.Data.LoginData;
 import in.rohansarkar.adhuri.R;
 import in.rohansarkar.adhuri.Util.PrefUtil;
+import in.rohansarkar.adhuri.Util.Util;
 import in.rohansarkar.adhuri.View.Activity.HomeActivity;
 import in.rohansarkar.adhuri.View.Interface.SwitchInterface;
 import in.rohansarkar.adhuri.ViewModel.LoginViewModel;
@@ -60,8 +64,13 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                 navController.navigate(R.id.action_loginFragment_to_forgotPassFragment);
                 break;
             case R.id.bLogin:
-                viewModel.tryLogin(etEmail.getText().toString().trim(), etPassword.getText().toString().trim());
-//                goToHome();
+//                viewModel.tryLogin(etEmail.getText().toString().trim(), etPassword.getText().toString().trim());
+//                File file = new File(getActivity().getFilesDir() + File.separator + Util.USER_IMAGE_NAME);
+//                if(file.exists()) {
+//                    file.delete();
+//                    showToast("Deleted");
+//                }
+                goToHome();
                 break;
             case R.id.bRegister:
                 navController.navigate(R.id.action_loginFragment_to_registerFragment);

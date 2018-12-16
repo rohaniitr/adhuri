@@ -1,10 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="wrap_content">
+    android:layout_width="match_parent" android:layout_height="match_parent">
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent" android:layout_height="wrap_content"
         android:id="@+id/recycler_view" android:background="@color/recyclerBg"/>
 
-</android.support.constraint.ConstraintLayout>
+    <TextView
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:textColor="@color/textBlack" android:textSize="16sp"
+        android:id="@+id/tvFragmentMessage" android:layout_centerInParent="true"
+        android:visibility="gone"/>
+    <ProgressBar
+        android:layout_width="48sp" android:layout_height="48sp"
+        android:id="@+id/pbLoading" android:layout_below="@+id/tvFragmentMessage"
+        android:layout_centerHorizontal="true" android:layout_marginTop="8sp"
+        android:visibility="gone"/>
+
+</RelativeLayout>

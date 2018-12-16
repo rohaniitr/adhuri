@@ -39,7 +39,10 @@
     <string name="samples_content_3">"‘আমাদের গেছে যে দিন\nএকেবারেই কি গেছে –\nকিছুই কি নেই বাকি’\n\nএকটুকু রইলেম চুপ করে\nতার পর বললেম ,\n‘রাতের সব তারাই আছে\nদিনের আলোর গভীরে ।’"</string>
     <string name="sample_tag">"Philosophy"</string>
     <string name="sample_time">"13 Sep 2018 at 24:07"</string>
-    <string name="sample_suggestion_counts">"Suggested by Rishav \u0026 3 others"</string>
+    <string name="sample_suggestion_count_2">"Suggested by %s \u0026 %d others"</string>
+    <string name="sample_suggestion_count_1">"Suggested by %s"</string>
+    <string name="sample_suggestion_count_0">"No suggestions yet"</string>
+    <string name="sample_suggestion_counts">"Suggested by Rohan \u0026 5 others"</string>
     <string name="sample_suggestion">"Philosophy"</string>
     <string name="sample_open_post_count">"12"</string>
     <string name="sample_close_post_count">"35"</string>
@@ -51,6 +54,8 @@
     <string name="sample_name2">"Avantika Kole"</string>
     <string name="sample_name3">"Sujoy Sarkar"</string>
     <string name="sample_name4">"Bhavna Mallik"</string>
+
     <string name="sample_name5">"Richa Soni"</string>
 
+    <string name="bullet">\u2022</string>
 </resources>

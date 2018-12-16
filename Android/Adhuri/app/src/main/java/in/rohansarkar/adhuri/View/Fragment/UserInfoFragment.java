@@ -5,8 +5,10 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -23,11 +25,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.File;
 
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import in.rohansarkar.adhuri.Model.Data.LoginData;
 import in.rohansarkar.adhuri.R;
 import in.rohansarkar.adhuri.Util.PrefUtil;
@@ -36,17 +36,18 @@ import in.rohansarkar.adhuri.View.Activity.VerificationActivity;
 import in.rohansarkar.adhuri.ViewModel.UserInfoViewModel;
 
 import static android.app.Activity.RESULT_OK;
+import static in.rohansarkar.adhuri.Util.Util.REQUEST_GET_IMAGE;
+import static in.rohansarkar.adhuri.Util.Util.USER_IMAGE_NAME;
 
 public class UserInfoFragment extends Fragment implements View.OnClickListener{
     private String LOG_TAG = this.getClass().getName();
-    private static final int REQUEST_GET_IMAGE = 1;
     private UserInfoViewModel viewModel;
     private NavController navController;
     private Spinner sGender;
     private ImageView ivImage;
     private TextView tvChangeImage;
     private EditText etName, etBio;
-    private LoginData userData;
+    private LoginData userInfo;
     private ProgressDialog progressDialog;
     private Button bSave, bLogout, bDeleteAccount;
 
@@ -59,21 +60,30 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
         super.onViewCreated(view, savedInstanceState);
         initialise(view);
         observeViewModel();
+        fillData();
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         try {
             if (resultCode == RESULT_OK && requestCode== REQUEST_GET_IMAGE) {
-                Uri selectedImageUri = data.getData();
-                if (null != selectedImageUri) {
-                    String path = getPathFromURI(selectedImageUri);
-                    Log.i(LOG_TAG, "Image Path : " + path);
-                    viewModel.saveImage(path, userData.getToken());
+                Bundle extras2 = data.getExtras();
+                if (extras2 != null) {
+                    Bitmap photo = extras2.getParcelable("data");
+                    viewModel.uploadImage(getActivity(), photo, userInfo.getToken());
                 }
+                else
+                    showToast("NULL");
+//                Uri selectedImageUri = data.getData();
+//                if (null != selectedImageUri) {
+//                    String path = getPathFromURI(selectedImageUri);
+//                    Log.i(LOG_TAG, "Image Path : " + path);
+//                    viewModel.uploadImage(path, userInfo.getToken());
+//                }
             }
         } catch (Exception e) {
             Log.e(LOG_TAG, "File select error");
+            showToast("Unable to get the image. Please select another image.");
             e.printStackTrace();
         }
     }
@@ -82,11 +92,11 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
         switch(view.getId()){
             case R.id.tvChangePhoto:
             case R.id.ivCircularImage:
-                getImage();
+                viewModel.getImage(this);
                 break;
             case R.id.bSave:
                 viewModel.saveUserInfo(etName.getText().toString().trim(), sGender.getSelectedItem().toString(),
-                        etBio.getText().toString().trim(), userData.getToken());
+                        etBio.getText().toString().trim(), userInfo.getToken());
                 break;
             case R.id.bLogout:
                 viewModel.logout();
@@ -117,11 +127,24 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
 
         setSpinner(view);
 
-        userData = PrefUtil.getUserInfo(getActivity());
-        fillData();
+        userInfo = PrefUtil.getUserInfo(getActivity());
     }
-
     private void observeViewModel(){
+        viewModel.getUserInfoUpadated().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(@Nullable Boolean userInfoUpadated) {
+                userInfo.setName(etName.getText().toString().trim());
+                userInfo.setBio(etBio.getText().toString().trim());
+                userInfo.setGender(sGender.getSelectedItem().toString());
+                setUserInfo(userInfo);
+            }
+        });
+        viewModel.getImageChanged().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(@Nullable Boolean imageChanged) {
+                updateImage();
+            }
+        });
         viewModel.getRemoveUserInfo().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(@Nullable Boolean removeUserInfo) {
@@ -158,20 +181,33 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
             }
         });
     }
+    private void setSpinner(View view){
+        sGender = view.findViewById(R.id.sGender);
 
-    private void getImage(){
-//        #####################################################################
-//        Need to implement this for devices with NO GALELRY application
-//        Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
-//        getIntent.setType("image/*");
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item,
+                Util.genderList);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sGender.setAdapter(dataAdapter);
+    }
+    private void fillData() {
+        if(userInfo ==null)
+            return;
+        if(userInfo.getName()!=null)
+            etName.setText(userInfo.getName());
+        if(userInfo.getBio()!=null)
+            etBio.setText(userInfo.getBio());
+        if(userInfo.getGender()!=null)
+            sGender.setSelection(Util.genderList.indexOf(userInfo.getGender()));
 
-        Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        pickIntent.setType("image/*");
-
-//        Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
-//        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
-
-        startActivityForResult(pickIntent, REQUEST_GET_IMAGE);
+        updateImage();
+    }
+    //Updates image from USER_IMAGE_NAME
+    private void updateImage() {
+        File file = new File(getActivity().getFilesDir(), USER_IMAGE_NAME);
+        if(file.exists()) {
+            ivImage.setImageURI(null);
+            ivImage.setImageURI(Uri.parse(file.getAbsolutePath()));
+        }
     }
     //Shows & Hides ProgressDialog
     private void showLoading(){
@@ -185,36 +221,23 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
         if(progressDialog!=null)
             progressDialog.dismiss();
     }
+    //Sets the title of ProgressDialog
     private void setLoadingTitle(String title){
         if(progressDialog==null)
             progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMessage(title);
     }
+    //Kill and go to login
     private void goToLogin(){
         Intent iLogin = new Intent(getActivity(), VerificationActivity.class);
         startActivity(iLogin);
         getActivity().finish();
     }
+    private void setUserInfo(LoginData loginData){
+        PrefUtil.setUserInfo(getActivity(), loginData);
+    }
     private void removeUserInfo(){
         PrefUtil.setUserInfo(getActivity(), null);
-    }
-    private void setSpinner(View view){
-        sGender = view.findViewById(R.id.sGender);
-
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item,
-                Util.genderList);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        sGender.setAdapter(dataAdapter);
-    }
-    private void fillData() {
-        if(userData==null)
-            return;
-        if(userData.getName()!=null)
-            etName.setText(userData.getName());
-        if(userData.getBio()!=null)
-            etBio.setText(userData.getBio());
-        if(userData.getGender()!=null)
-            sGender.setSelection(Util.genderList.indexOf(userData.getGender()));
     }
     public String getPathFromURI(Uri contentUri) {
         String res = null;

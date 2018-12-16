@@ -2,51 +2,20 @@ package in.rohansarkar.adhuri.Model.Data;
 
 import java.util.ArrayList;
 
-public class LoginData {
-    private Boolean success;
-    private String name;
+public class LoginData extends UserData{
     private String token;
-    private String email;
-    private String bio;
-    private String image;
-    private String gender;
-    private ArrayList<String> tags;
 
-    public LoginData(String name, String token, String email, String bio, String image, String gender, ArrayList<String> tags) {
-        this.name = name;
+    public LoginData(String _id, String name, String token, String email, String bio, String image, String gender, int openPostCount,
+            int closePostCount, ArrayList<String> tags) {
+        super(_id, name, email, bio, image, gender, openPostCount, closePostCount, tags);
         this.token = token;
-        this.email = email;
-        this.bio = bio;
-        this.image = image;
-        this.gender = gender;
-        this.tags = tags;
     }
-
-    public String getName() {
-        return name;
+    public LoginData(String _id, String name, String token, String email, String bio, String image, String gender, ArrayList<String> tags) {
+        super(_id, name, email, bio, image, gender, 0, 0, tags);
+        this.token = token;
     }
 
     public String getToken() {
         return token;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getBio() {
-        return bio;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public ArrayList<String> getTags() {
-        return tags;
     }
 }

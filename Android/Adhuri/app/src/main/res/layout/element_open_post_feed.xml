@@ -43,8 +43,7 @@
                 <TextView
                     android:layout_width="wrap_content" android:layout_height="wrap_content"
                     android:id="@+id/tvTime"
-                    android:textColor="@color/textOffBlack" android:textSize="12sp"
-                    android:text="@string/sample_time"/>
+                    android:textColor="@color/textOffBlack" android:textSize="12sp"/>
             </LinearLayout>
         </RelativeLayout>
 
@@ -71,7 +70,7 @@
                 android:layout_width="wrap_content" android:layout_height="wrap_content"
                 android:id="@+id/tvSuggestionCount" android:layout_toRightOf="@+id/ivSuggestionCount"
                 android:textColor="@color/textOffBlack" android:textSize="13sp"
-                android:layout_centerVertical="true" android:text="@string/sample_suggestion_counts"/>
+                android:layout_centerVertical="true"/>
         </RelativeLayout>
     </LinearLayout>
 </android.support.v7.widget.CardView>

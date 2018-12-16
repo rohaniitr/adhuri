@@ -36,6 +36,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginRight="12sp" android:layout_marginLeft="12sp"
             android:layout_weight="1">
             <TextView
                 android:layout_width="match_parent" android:layout_height="wrap_content"
@@ -51,26 +52,12 @@
 
     </LinearLayout>
 
-    <RelativeLayout
+    <TextView
         android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:layout_below="@+id/lPostCount" android:layout_toRightOf="@+id/iProfilePic"
-        android:layout_marginLeft="24sp" android:layout_marginTop="12sp">
-
-        <include
-        layout="@layout/element_tag_dark" android:id="@+id/iTag1"
-        android:layout_width="wrap_content" android:layout_height="wrap_content"/>
-        <include
-        layout="@layout/element_tag_dark" android:id="@+id/iTag2"
-        android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:layout_marginLeft="8sp"
-        android:layout_toRightOf="@+id/iTag1"/>
-        <include
-        layout="@layout/element_tag_dark" android:id="@+id/iTag3"
-        android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:layout_marginTop="8sp"
-        android:layout_below="@+id/iTag1"/>
-
-    </RelativeLayout>
+        android:textSize="14sp" android:textColor="@color/textOffBlack"
+        android:layout_marginLeft="24sp" android:layout_marginTop="12sp"
+        android:id="@+id/tvTags" android:layout_below="@+id/lPostCount"
+        android:layout_toRightOf="@+id/iProfilePic" android:layout_marginRight="24sp"/>
 
     <TextView
         android:layout_width="wrap_content" android:layout_height="wrap_content"
