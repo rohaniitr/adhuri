@@ -32,6 +32,7 @@ router.post('/updateDetail', function(req,res){
   });
 });
 
+//Holes in this system design
 router.get('/removeDetail', function(req,res){
   console.log('RemoveDetail');
 

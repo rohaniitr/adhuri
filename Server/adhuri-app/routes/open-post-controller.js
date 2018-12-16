@@ -267,9 +267,9 @@ router.get('/getUserPosts/:userId', function(req,res){
     // Add User data here
     promiseList = [];
     postList.forEach(function(post){
-      promiseList.push(Users.findOne({_id:post.userId}).select("name picture").exec().then(function(userData){
+      promiseList.push(Users.findOne({_id:post.userId}).select("name image").exec().then(function(userData){
         post.name = userData.name;
-        post.picture = userData.picture;
+        post.image = userData.image;
         delete post.userId;
       }));
     });
