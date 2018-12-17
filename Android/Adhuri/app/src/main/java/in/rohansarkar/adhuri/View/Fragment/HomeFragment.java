@@ -3,6 +3,7 @@ package in.rohansarkar.adhuri.View.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -17,27 +18,22 @@ import in.rohansarkar.adhuri.R;
 import in.rohansarkar.adhuri.View.Interface.HomeInterface;
 
 public class HomeFragment extends Fragment {
-    private HomeInterface homeInterface;
     private BottomNavigationView bottomNavigationView;
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        homeInterface= (HomeInterface) context;
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
-
-        bottomNavigationView = (BottomNavigationView) view.findViewById(R.id.bottom_navigation);
+        return inflater.inflate(R.layout.fragment_home, container, false);
+    }
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        initialise(view);
         setupNavigationView();
-
-        return view;
     }
 
-
-
+    private void initialise(View view) {
+        bottomNavigationView = view.findViewById(R.id.bottom_navigation);
+    }
     private void setupNavigationView() {
         if (bottomNavigationView != null) {
 
@@ -56,7 +52,6 @@ public class HomeFragment extends Fragment {
                     });
         }
     }
-
     protected void selectFragment(MenuItem item) {
         item.setChecked(true);
 
@@ -68,11 +63,14 @@ public class HomeFragment extends Fragment {
                 pushFragment(new FeedFragment());
                 break;
             case R.id.action_profile:
+//                Send data with fragment
+//                Bundle args = new Bundle();
+//                args.putInt(context.getResources().getString(R.string.CURRENT_TIME), position);
+//                navController.navigate(R.id.action_videoListFragment_to_videoPlayerFragment, args);
                 pushFragment(new ProfileFragment());
                 break;
         }
     }
-
     protected void pushFragment(Fragment fragment) {
         if (fragment == null)
             return;

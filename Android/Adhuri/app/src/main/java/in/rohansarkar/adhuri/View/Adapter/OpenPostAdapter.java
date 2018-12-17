@@ -2,84 +2,71 @@ package in.rohansarkar.adhuri.View.Adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 
-import in.rohansarkar.adhuri.Model.Data.OpenPost;
+import androidx.navigation.NavController;
+import in.rohansarkar.adhuri.Model.Data.SuggestionData;
 import in.rohansarkar.adhuri.R;
-import in.rohansarkar.adhuri.View.Interface.HomeInterface;
+import in.rohansarkar.adhuri.Util.Util;
 
 public class OpenPostAdapter extends RecyclerView.Adapter<OpenPostAdapter.MyViewHolder> {
 
     private Context context;
-    private ArrayList<OpenPost> postData;
+    private ArrayList<SuggestionData> suggestionList;
     private LayoutInflater inflater;
-    private HomeInterface homeInterface;
+    private NavController navController;
 
-    public OpenPostAdapter(Context context, HomeInterface homeInterface, ArrayList<OpenPost> postData) {
+    public OpenPostAdapter(Context context, NavController navController, ArrayList<SuggestionData> suggestionList) {
         this.context = context;
-        this.homeInterface = homeInterface;
-        this.postData = postData;
+        this.suggestionList = suggestionList;
         inflater = LayoutInflater.from(context);
+        this.navController = navController;
     }
-
     @Override
     public OpenPostAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int position) {
-        View view = inflater.inflate(R.layout.element_open_post_feed, parent, false);
+        View view = inflater.inflate(R.layout.element_suggestion, parent, false);
         OpenPostAdapter.MyViewHolder holder = new OpenPostAdapter.MyViewHolder(view);
         return holder;
     }
-
     @Override
     public void onBindViewHolder(OpenPostAdapter.MyViewHolder myViewHolder, final int position) {
-        myViewHolder.tvName.setText(postData.get(position).getName());
-        myViewHolder.ivProfilePic.setBackground(postData.get(position).getProfilePic());
-        myViewHolder.tvTag.setText(postData.get(position).getTags());
-        myViewHolder.tvTime.setText(postData.get(position).getTime());
-        myViewHolder.tvContent.setText(postData.get(position).getContent());
-        myViewHolder.tvSuggestionCount.setText(context.getResources().getString(R.string.sample_suggestion_counts));
+        String name = suggestionList.get(position).getName();
+        if(name==null)
+            name = "Some Name";
 
-        View.OnClickListener showOpenPostListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                homeInterface.showOpenPostFragment();
-            }
-        };
-        myViewHolder.tvContent.setOnClickListener(showOpenPostListener);
-        myViewHolder.tvSuggestionCount.setOnClickListener(showOpenPostListener);
+        SpannableStringBuilder content = new SpannableStringBuilder(name + " " + suggestionList.get(position).getContent());
+        content.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), 0, name.length(),
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-        View.OnClickListener showProfileListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                homeInterface.showProfileFragment();
-            }
-        };
-        myViewHolder.tvName.setOnClickListener(showProfileListener);
-        myViewHolder.ivProfilePic.setOnClickListener(showProfileListener);
+        myViewHolder.tvTime.setText(suggestionList.get(position).getTime());
+        myViewHolder.tvSuggestion.setText(content);
+        if(suggestionList.get(position).getImage()!= null)
+            Picasso.get().load(Util.baseUrl + '/' + suggestionList.get(position).getImage()).into(myViewHolder.ivProfilePic);
     }
-
     @Override
     public int getItemCount() {
-        return postData.size();
+        return suggestionList.size();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder{
-        TextView tvName, tvTime, tvTag, tvContent, tvSuggestionCount;
+        TextView tvTime, tvSuggestion;
         ImageView ivProfilePic;
 
         public MyViewHolder(View itemView) {
             super(itemView);
-            tvName = (TextView) itemView.findViewById(R.id.tvName);
             ivProfilePic = (ImageView) itemView.findViewById(R.id.ivCircularImage);
-            tvTag = (TextView) itemView.findViewById(R.id.tvTag);
             tvTime = (TextView) itemView.findViewById(R.id.tvTime);
-            tvContent = (TextView) itemView.findViewById(R.id.tvContent);
-            tvSuggestionCount = (TextView) itemView.findViewById(R.id.tvSuggestionCount);
+            tvSuggestion = (TextView) itemView.findViewById(R.id.tvSuggestion);
         }
     }
 }

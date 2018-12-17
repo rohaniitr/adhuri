@@ -11,7 +11,7 @@ import in.rohansarkar.adhuri.Model.Data.UserOpenPostData;
 import in.rohansarkar.adhuri.Model.Repositories.UserModel;
 import in.rohansarkar.adhuri.Model.Repositories.VerificationModel;
 
-public class UserOpenPostViewModel extends ViewModel {
+public class UserOpenPostFeedViewModel extends ViewModel {
     private MutableLiveData<ArrayList<UserOpenPostData>> postData;
     private MutableLiveData<Boolean> showLoading;
     private MutableLiveData<String> fragmentMessage;

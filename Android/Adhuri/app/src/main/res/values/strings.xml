@@ -47,7 +47,9 @@
     <string name="sample_open_post_count">"12"</string>
     <string name="sample_close_post_count">"35"</string>
     <string name="sample_bio">"Fun loving guy!!!\nBorn on 3rd September\nPisces"</string>
-    <string name="sample_collaborators">" \u0026 2 others collaborated for this"</string>
+    <string name="sample_collaborators_2">"SomePerson \u0026 %d others collaborated for this"</string>
+    <string name="sample_collaborators_1">"SomePerson collaborated for this"</string>
+    <string name="sample_collaborators_0">"No collaboration"</string>
     <string name="sample_suggestors">"Richa Soni"</string>
 
     <string name="sample_name1">"Rohan Sarkar"</string>
@@ -58,4 +60,6 @@
     <string name="sample_name5">"Richa Soni"</string>
 
     <string name="bullet">\u2022</string>
+    <string name="USER_ID">userId</string>
+    <string name="PASS_POST">passPost</string>
 </resources>

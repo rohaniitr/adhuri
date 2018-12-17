@@ -64,13 +64,13 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                 navController.navigate(R.id.action_loginFragment_to_forgotPassFragment);
                 break;
             case R.id.bLogin:
-//                viewModel.tryLogin(etEmail.getText().toString().trim(), etPassword.getText().toString().trim());
+                viewModel.tryLogin(etEmail.getText().toString().trim(), etPassword.getText().toString().trim());
 //                File file = new File(getActivity().getFilesDir() + File.separator + Util.USER_IMAGE_NAME);
 //                if(file.exists()) {
 //                    file.delete();
 //                    showToast("Deleted");
 //                }
-                goToHome();
+//                goToHome();
                 break;
             case R.id.bRegister:
                 navController.navigate(R.id.action_loginFragment_to_registerFragment);

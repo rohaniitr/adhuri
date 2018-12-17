@@ -166,10 +166,9 @@ router.get('/getUserPosts/:userId', function(req,res){
     // Add User data here
     promiseList = [];
     postList.forEach(function(post){
-      promiseList.push(Users.findOne({_id:post.userId}).select("name picture").exec().then(function(userData){
+      promiseList.push(Users.findOne({_id:post.userId}).select("name image").exec().then(function(userData){
         post.name = userData.name;
-        post.picture = userData.picture;
-        delete post.userId;
+        post.image = userData.image;
       }));
     });
     return Promise.all(promiseList);
@@ -197,7 +196,7 @@ router.get('/getUserPosts/:userId', function(req,res){
     for(var i=0; i<postList.length; i++){
       postList[i].suggestorCount = userMatrix[i].length;
       //Get max 3 valid pics
-      postList[i].suggestorPics = userMatrix[i].map(function(user){
+      postList[i].suggestorImages = userMatrix[i].map(function(user){
         if(user.picture != null)
           return user.picture;
       });

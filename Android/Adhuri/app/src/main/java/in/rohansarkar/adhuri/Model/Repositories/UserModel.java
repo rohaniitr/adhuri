@@ -17,6 +17,8 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 
 import in.rohansarkar.adhuri.Model.Data.SuccessData;
+import in.rohansarkar.adhuri.Model.Data.SuggestionData;
+import in.rohansarkar.adhuri.Model.Data.UserClosePostData;
 import in.rohansarkar.adhuri.Model.Data.UserOpenPostData;
 import in.rohansarkar.adhuri.Model.Retrofit.RepoClient;
 import in.rohansarkar.adhuri.Model.Retrofit.RepoInterface;
@@ -191,14 +193,56 @@ public class UserModel {
                 }
 
                 Log.d(LOG_TAG, "getUserOpenPost onResponse Success");
-                if(response.body()==null || response.body().size()<=0)
+                if(response.body()==null || response.body().size()<=0) {
                     fragmentMessage.setValue("No Open Posts from User");
-                fragmentMessage.setValue(null);
-                postData.setValue(response.body());
+                    postData.setValue(null);
+                }
+                else {
+                    fragmentMessage.setValue(null);
+                    postData.setValue(response.body());
+                }
             }
 
             @Override
             public void onFailure(Call<ArrayList<UserOpenPostData>> call, Throwable t) {
+                showLoading.setValue(false);
+                fragmentMessage.setValue("Unable to fetch posts");
+                Log.d(LOG_TAG, "getUserOpenPost onFailure");
+            }
+        });
+    }
+
+    public void getUserClosePost(final String userId, final String token,
+                                final MutableLiveData<ArrayList<UserClosePostData>> postData,
+                                final MutableLiveData<Boolean> showLoading, final MutableLiveData<String> fragmentMessage){
+        RepoInterface service = RepoClient.getRetrofitInstance().create(RepoInterface.class);
+        Call<ArrayList<UserClosePostData>> call = service.getUserClosePosts(userId, token);
+        showLoading.setValue(true);
+        fragmentMessage.setValue("Fetching User Close Posts...");
+
+        call.enqueue(new Callback<ArrayList<UserClosePostData>>() {
+            @Override
+            public void onResponse(Call<ArrayList<UserClosePostData>> call, Response<ArrayList<UserClosePostData>> response) {
+                showLoading.setValue(false);
+                if((!response.isSuccessful()) || (response.code()!=200)) {
+                    fragmentMessage.setValue("There is some problem fetching posts");
+                    Log.d(LOG_TAG, "getUserOpenPost onResponse Failure : " + response.code() + " " + response.isSuccessful());
+                    return;
+                }
+
+                Log.d(LOG_TAG, "getUserOpenPost onResponse Success");
+                if(response.body()==null || response.body().size()<=0) {
+                    fragmentMessage.setValue("No Open Posts from User");
+                    postData.setValue(null);
+                }
+                else {
+                    fragmentMessage.setValue(null);
+                    postData.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<UserClosePostData>> call, Throwable t) {
                 showLoading.setValue(false);
                 fragmentMessage.setValue("Unable to fetch posts");
                 Log.d(LOG_TAG, "getUserOpenPost onFailure");

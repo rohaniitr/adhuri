@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import androidx.navigation.NavController;
 import in.rohansarkar.adhuri.Model.Data.ClosePost;
 import in.rohansarkar.adhuri.R;
 import in.rohansarkar.adhuri.View.Interface.HomeInterface;
@@ -20,22 +21,20 @@ public class ClosePostAdapter extends RecyclerView.Adapter<ClosePostAdapter.MyVi
     private ArrayList<ClosePost> postData;
     private LayoutInflater inflater;
     private CollaboratorAdapter collaboratorAdapter;
-    private HomeInterface homeInterface;
+    private NavController navController;
 
-    public ClosePostAdapter(Context context, ArrayList<ClosePost> postData) {
+    public ClosePostAdapter(Context context, NavController navController, ArrayList<ClosePost> postData) {
         this.context = context;
         this.postData = postData;
         inflater = LayoutInflater.from(context);
-        homeInterface = (HomeInterface) context;
+        this.navController = navController;
     }
-
     @Override
     public ClosePostAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int position) {
         View view = inflater.inflate(R.layout.element_close_post_feed, parent, false);
         ClosePostAdapter.MyViewHolder holder = new ClosePostAdapter.MyViewHolder(view);
         return holder;
     }
-
     @Override
     public void onBindViewHolder(ClosePostAdapter.MyViewHolder myViewHolder, final int position) {
         myViewHolder.tvName.setText(postData.get(position).getName());
@@ -51,12 +50,11 @@ public class ClosePostAdapter extends RecyclerView.Adapter<ClosePostAdapter.MyVi
         View.OnClickListener showClosePostListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                homeInterface.showClosePostFragment();
+                navController.navigate(R.id.action_homeFragment_to_closePostFragment);
             }
         };
         myViewHolder.tvContent.setOnClickListener(showClosePostListener);
     }
-
     @Override
     public int getItemCount() {
         return postData.size();
@@ -75,9 +73,9 @@ public class ClosePostAdapter extends RecyclerView.Adapter<ClosePostAdapter.MyVi
             tvTag = (TextView) itemView.findViewById(R.id.tvTag);
             tvTime = (TextView) itemView.findViewById(R.id.tvTime);
             tvContent = (TextView) itemView.findViewById(R.id.tvContent);
-            ivCollaborator[0] = (ImageView) itemView.findViewById(R.id.iCollaborator1).findViewById(R.id.ivCircularImage);
-            ivCollaborator[1] = (ImageView) itemView.findViewById(R.id.iCollaborator2).findViewById(R.id.ivCircularImage);
-            ivCollaborator[2] = (ImageView) itemView.findViewById(R.id.iCollaborator3).findViewById(R.id.ivCircularImage);
+//            ivCollaborator[0] = (ImageView) itemView.findViewById(R.id.iCollaborator1).findViewById(R.id.ivCircularImage);
+//            ivCollaborator[1] = (ImageView) itemView.findViewById(R.id.iCollaborator2).findViewById(R.id.ivCircularImage);
+//            ivCollaborator[2] = (ImageView) itemView.findViewById(R.id.iCollaborator3).findViewById(R.id.ivCircularImage);
 //            rvCollaborators = (RecyclerView) itemView.findViewById(R.id.rvCollabotorPic);
         }
     }

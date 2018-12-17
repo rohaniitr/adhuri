@@ -16,7 +16,8 @@ var tokenController = require('./routes/token-controller');
 app.use(bodyParser.json());
 // for parsing application/xwww-
 app.use(bodyParser.urlencoded());
-
+//Make the folder public for profile pictures
+app.use(express.static('public/images'));
 
 app.use('/users',authController); //Done
 app.use('/',tokenController); //Required here //Done
@@ -25,8 +26,7 @@ app.use('/openPost',openPostController);
 app.use('/closePost',closePostController);
 app.use('/suggestion',suggestionController);
 
-//Make the folder public for profile pictures
-app.use(express.static('public/images'));
+
 
 app.listen(3000);
 console.log('Starting Server!');

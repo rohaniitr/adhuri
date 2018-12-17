@@ -22,13 +22,12 @@
             android:layout_marginLeft="16sp" android:layout_toRightOf="@+id/lProfilePic">
             <TextView
                 android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:id="@+id/tvName" android:text="@string/sample_name1"
+                android:id="@+id/tvName"
                 android:textSize="16sp" android:textColor="@color/textBlack"/>
             <TextView
                 android:layout_width="wrap_content" android:layout_height="wrap_content"
                 android:id="@+id/tvTime"
-                android:textColor="@color/textOffBlack" android:textSize="12sp"
-                android:text="@string/sample_time"/>
+                android:textColor="@color/textOffBlack" android:textSize="12sp"/>
         </LinearLayout>
     </RelativeLayout>
 
@@ -37,18 +36,21 @@
         android:textColor="@color/textBlack" android:textSize="16sp"
         android:id="@+id/tvContent" android:layout_below="@id/lUserDetails"
         android:layout_marginLeft="18sp" android:layout_marginRight="18sp"
-        android:layout_marginTop="12sp" android:layout_marginBottom="12sp"
-        android:text="@string/samples_content_3"/>
+        android:layout_marginTop="12sp" android:layout_marginBottom="12sp"/>
 
     <ImageView
         android:layout_width="match_parent" android:layout_height="1sp"
         android:id="@+id/ivContentDivider" android:layout_below="@id/tvContent"
         android:background="@color/alphaBlack"/>
 
-    <android.support.v7.widget.RecyclerView
-        android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:id="@+id/rvSuggestion" android:paddingTop="8sp"
+    <include
+        android:layout_width="match_parent" android:layout_height="match_parent"
+        layout="@layout/fragment_recycler_view" android:id="@+id/rvSuggestion" android:paddingTop="8sp"
         android:layout_below="@id/ivContentDivider" android:layout_above="@+id/ivSuggestionDivider"/>
+    <!--<android.support.v7.widget.RecyclerView-->
+        <!--android:layout_width="match_parent" android:layout_height="wrap_content"-->
+        <!--android:id="@+id/rvSuggestion" android:paddingTop="8sp"-->
+        <!--android:layout_below="@id/ivContentDivider" android:layout_above="@+id/ivSuggestionDivider"/>-->
 
     <ImageView
         android:layout_width="match_parent" android:layout_height="1sp"

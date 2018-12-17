@@ -21,7 +21,7 @@ public class PostFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_post, container, false);
+        View view = inflater.inflate(R.layout.fragment_open_post, container, false);
         fillData();
 
         rvSuggestionView = (RecyclerView) view.findViewById(R.id.rvSuggestion);

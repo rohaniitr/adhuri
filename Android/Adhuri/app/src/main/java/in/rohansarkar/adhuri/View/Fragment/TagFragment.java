@@ -80,7 +80,6 @@ public class TagFragment extends Fragment implements View.OnClickListener{
         viewModel.getTagsUpdated().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(@Nullable Boolean tagsUpdated) {
-                showToast("getTagsUpdated called");
                 updateTags();
             }
         });

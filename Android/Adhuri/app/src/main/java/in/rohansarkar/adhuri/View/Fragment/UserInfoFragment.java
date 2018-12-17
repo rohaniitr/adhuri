@@ -28,6 +28,7 @@ import android.widget.Toast;
 import java.io.File;
 
 import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import in.rohansarkar.adhuri.Model.Data.LoginData;
 import in.rohansarkar.adhuri.R;
 import in.rohansarkar.adhuri.Util.PrefUtil;
@@ -44,7 +45,7 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
     private UserInfoViewModel viewModel;
     private NavController navController;
     private Spinner sGender;
-    private ImageView ivImage;
+    private ImageView ivImage, ivBack;
     private TextView tvChangeImage;
     private EditText etName, etBio;
     private LoginData userInfo;
@@ -104,14 +105,18 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
             case R.id.bDeleteAccount:
                 viewModel.deleteAccount();
                 break;
+            case R.id.ivBack:
+                navController.popBackStack();
+                break;
         }
     }
 
     private void initialise(View view) {
         viewModel = ViewModelProviders.of(getActivity()).get(UserInfoViewModel.class);
-//        navController = Navigation.findNavController(view);
+        navController = Navigation.findNavController(view);
 
         ivImage = view.findViewById(R.id.ivCircularImage);
+        ivBack = view.findViewById(R.id.ivBack);
         tvChangeImage =  view.findViewById(R.id.tvChangePhoto);
         etName = view.findViewById(R.id.etName);
         etBio = view.findViewById(R.id.etBio);
@@ -124,6 +129,7 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
         bSave.setOnClickListener(this);
         bLogout.setOnClickListener(this);
         bDeleteAccount.setOnClickListener(this);
+        ivBack.setOnClickListener(this);
 
         setSpinner(view);
 
@@ -238,6 +244,10 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
     }
     private void removeUserInfo(){
         PrefUtil.setUserInfo(getActivity(), null);
+
+        File file = new File(getActivity().getFilesDir().getAbsolutePath() + File.separator + Util.USER_IMAGE_NAME);
+        if(file.exists())
+            file.delete();
     }
     public String getPathFromURI(Uri contentUri) {
         String res = null;

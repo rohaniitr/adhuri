@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import in.rohansarkar.adhuri.Model.Data.LoginData;
 import in.rohansarkar.adhuri.Model.Data.SuccessData;
+import in.rohansarkar.adhuri.Model.Data.SuggestionData;
+import in.rohansarkar.adhuri.Model.Data.UserClosePostData;
 import in.rohansarkar.adhuri.Model.Data.UserData;
 import in.rohansarkar.adhuri.Model.Data.UserOpenPostData;
 import okhttp3.MultipartBody;
@@ -53,4 +55,8 @@ public interface RepoInterface {
 
     @GET("/openPost/getUserPosts/{userId}")
     Call<ArrayList<UserOpenPostData>> getUserOpenPosts(@Path("userId") String userId, @Header("x-access-token") String token);
+    @GET("/closePost/getUserPosts/{userId}")
+    Call<ArrayList<UserClosePostData>> getUserClosePosts(@Path("userId") String userId, @Header("x-access-token") String token);
+    @GET("/suggestion/get/{postId}")
+    Call<ArrayList<SuggestionData>> getSuggestions(@Path("postId") String postId, @Header("x-access-token") String token);
 }

@@ -1,7 +1,8 @@
 package in.rohansarkar.adhuri.View.Fragment;
 
-import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -11,58 +12,57 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import in.rohansarkar.adhuri.R;
 import in.rohansarkar.adhuri.View.Adapter.ProfilePostAdapter;
-import in.rohansarkar.adhuri.View.Interface.HomeInterface;
 
-public class FeedFragment extends Fragment {
+public class FeedFragment extends Fragment implements View.OnClickListener{
     private ProfilePostAdapter adapter;
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    private Context context;
     private ImageView ivBack;
-    private HomeInterface homeInterface;
+    private NavController navController;
     private FloatingActionButton fabAddPost;
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        homeInterface = (HomeInterface) context;
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_feed, container, false);
+    }
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        initialise(view);
+    }
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.fabAddPost:
+                navController.navigate(R.id.action_homeFragment_to_addPostFragment);
+                break;
+            case R.id.ivBack:
+                navController.popBackStack();
+                break;
+        }
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_feed, container, false);
+    private void initialise(View view) {
+        navController = Navigation.findNavController(view);
 
-        fabAddPost = (FloatingActionButton) view.findViewById(R.id.fabAddPost);
-        fabAddPost.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                homeInterface.showAddPostFragment();
-            }
-        });
+        ivBack = view.findViewById(R.id.ivBack);
+        fabAddPost = view.findViewById(R.id.fabAddPost);
 
-        addOnBackListener(view);
-        tabLayout = (TabLayout) view.findViewById(R.id.tlPost);
-        viewPager = (ViewPager) view.findViewById(R.id.vpPost);
+        fabAddPost.setOnClickListener(this);
+        ivBack.setOnClickListener(this);
+
+        tabLayout = view.findViewById(R.id.tlPost);
+        viewPager = view.findViewById(R.id.vpPost);
 
         adapter = new ProfilePostAdapter(getActivity().getSupportFragmentManager());
-        adapter.addFragment(new OpenPostFragment(), "OPEN");
-        adapter.addFragment(new ClosePostFragment(), "CLOSE");
+        adapter.addFragment(new OpenPostFeedFragment(), "OPEN");
+        adapter.addFragment(new ClosePostFeedFragment(), "CLOSE");
 
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
-
-        return view;
-    }
-
-    private void addOnBackListener(View view){
-        ivBack = (ImageView) view.findViewById(R.id.ivBack);
-        ivBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                homeInterface.backPressed();
-            }
-        });
     }
 }

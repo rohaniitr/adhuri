@@ -270,7 +270,6 @@ router.get('/getUserPosts/:userId', function(req,res){
       promiseList.push(Users.findOne({_id:post.userId}).select("name image").exec().then(function(userData){
         post.name = userData.name;
         post.image = userData.image;
-        delete post.userId;
       }));
     });
     return Promise.all(promiseList);
