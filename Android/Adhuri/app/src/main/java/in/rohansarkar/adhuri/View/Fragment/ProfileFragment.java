@@ -23,6 +23,7 @@ import java.io.File;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import in.rohansarkar.adhuri.Model.Data.LoginData;
+import in.rohansarkar.adhuri.Model.Data.UserData;
 import in.rohansarkar.adhuri.R;
 import in.rohansarkar.adhuri.Util.PrefUtil;
 import in.rohansarkar.adhuri.View.Adapter.ProfilePostAdapter;
@@ -38,10 +39,13 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
     private FloatingActionButton fabAddPost;
     private ProgressDialog progressDialog;
     private ProfileViewModel viewModel;
-    private LoginData userInfo;
+    private LoginData adminData;
+    private UserData userData;
+    private String userId;
     private ImageView ivImage, ivSettings;
     private TextView tvName, tvBio, tvTags, tvOpenPostCount, tvClosePostCount;
-    private String userId;
+    private OpenPostFeedFragment openPostFeedFragment = new OpenPostFeedFragment();
+    private ClosePostFeedFragment closePostFeedFragment = new ClosePostFeedFragment();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -52,7 +56,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         super.onViewCreated(view, savedInstanceState);
         initialise(view);
         observeViewModel();
-        fillData();
+        getUserData();
+        fillUserData();
+        setFragments();
     }
     @Override
     public void onClick(View view) {
@@ -78,41 +84,42 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         tvTags = view.findViewById(R.id.tvTags);
         tvOpenPostCount = view.findViewById(R.id.tvOpenPostCount);
         tvClosePostCount = view.findViewById(R.id.tvClosePostCount);
-        ivSettings = (ImageView) view.findViewById(R.id.ivSettings);
+        ivSettings = view.findViewById(R.id.ivSettings);
         fabAddPost = view.findViewById(R.id.fabAddPost);
 
         fabAddPost.setOnClickListener(this);
         ivSettings.setOnClickListener(this);
-
-        adapter = new ProfilePostAdapter(getActivity().getSupportFragmentManager());
-        adapter.addFragment(new OpenPostFeedFragment(), "OPEN");
-        adapter.addFragment(new ClosePostFeedFragment(), "CLOSE");
-
-        viewPager.setAdapter(adapter);
-        tabLayout.setupWithViewPager(viewPager);
-
-        //Get user info based on userId received
-        if (this.getArguments() == null || this.getArguments().getString(getResources().getString(R.string.USER_ID)) == null ||
-                this.getArguments().getString(getResources().getString(R.string.USER_ID)) == PrefUtil.getUserInfo(getActivity()).get_id())
-            userId = null;
-        else
-            userId = this.getArguments().getString(getResources().getString(R.string.USER_ID));
-
-        if (userId == null){
-            //If user is owner
-            userInfo = PrefUtil.getUserInfo(getActivity());
-            ivSettings.setVisibility(View.VISIBLE);
-        } else {
-            //Some other user
-            //Fetch User details
-            ivSettings.setVisibility(View.GONE);
-        }
     }
     private void observeViewModel(){
+        viewModel.getUserData().observe(this, new Observer<UserData>() {
+            @Override
+            public void onChanged(@Nullable UserData data) {
+                if(userData==null){
+                    showToast("Unable to find User");
+                    navController.popBackStack();
+                    return;
+                }
+
+                userData = data;
+                fillUserData();
+            }
+        });
         viewModel.getImageDownloaded().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(@Nullable Boolean imageChanged) {
                 updateImage();
+            }
+        });
+        viewModel.getShowLoading().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(@Nullable Boolean showLoading) {
+                showLoading(showLoading);
+            }
+        });
+        viewModel.getLoadingMessage().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(@Nullable String message) {
+                setLoadingTitle(message);
             }
         });
         viewModel.getToastMessage().observe(this, new Observer<String>() {
@@ -122,25 +129,64 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
             }
         });
     }
-    private void fillData() {
-        if(userInfo ==null)
+    private void getUserData(){
+        //Get user info based on userId received
+        if(this.getArguments() == null){
+            showToast("Unable to get the user data");
+            navController.popBackStack();
             return;
-        if(userInfo.getName()!=null)
-            tvName.setText(userInfo.getName());
-        if(userInfo.getBio()!=null)
-            tvBio.setText(userInfo.getBio());
-        if(userInfo.getTags()!=null && userInfo.getTags().size()>0){
-            String s = userInfo.getTags().get(0);
-            for(int i=1; i<userInfo.getTags().size(); i++)
-                s+= (" " + getActivity().getString(R.string.bullet) + " " + userInfo.getTags().get(i));
+        }
+
+        userId = this.getArguments().getString(getResources().getString(R.string.USER_ID));
+        //Get Admin's data & check if it's admin's profile
+        adminData = PrefUtil.getUserInfo(getActivity());
+        if(userId == null || adminData.get_id().equals(userId)){
+            //Admin's Profile
+            userData = adminData;
+            ivSettings.setVisibility(View.VISIBLE);
+        }
+        else{
+            //Get user's data
+            viewModel.getUserInfo(userId, adminData.getToken());
+            ivSettings.setVisibility(View.GONE);
+        }
+    }
+    private void fillUserData() {
+        if(userData ==null)
+            return;
+        if(userData.getName()!=null)
+            tvName.setText(userData.getName());
+        if(userData.getBio()!=null)
+            tvBio.setText(userData.getBio());
+        if(userData.getTags()!=null && userData.getTags().size()>0){
+            String s = userData.getTags().get(0);
+            for(int i = 1; i< userData.getTags().size(); i++)
+                s+= (" " + getActivity().getString(R.string.bullet) + " " + userData.getTags().get(i));
             tvTags.setText(s);
         }
 
         updateImage();
     }
+    private void setFragments(){
+        //DO not need to send userID here as these fragments are part of same Activity?
+//        Bundle bundle = new Bundle();
+//        bundle.putString(this.getString(R.string.USER_ID),  userId);
+
+        if(openPostFeedFragment==null)
+            openPostFeedFragment = new OpenPostFeedFragment();
+        if(closePostFeedFragment==null)
+            closePostFeedFragment = new ClosePostFeedFragment();
+
+        adapter = new ProfilePostAdapter(getActivity().getSupportFragmentManager());
+        adapter.addFragment(openPostFeedFragment, "OPEN");
+        adapter.addFragment(closePostFeedFragment, "CLOSE");
+
+        viewPager.setAdapter(adapter);
+        tabLayout.setupWithViewPager(viewPager);
+    }
     //Updates image from USER_IMAGE_NAME
     private void updateImage() {
-        if(userInfo.getImage()==null || userInfo.getImage().length()<=0)
+        if(adminData.getImage()==null || adminData.getImage().length()<=0)
             return;
 
         File file = new File(getActivity().getFilesDir(), USER_IMAGE_NAME);
@@ -151,9 +197,29 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         }
 
         //Else download image
-        viewModel.downloadImage(getActivity(), userInfo.getImage(), userInfo.getToken());
+        viewModel.downloadImage(getActivity(), adminData.getImage(), adminData.getToken());
     }
     private void showToast(String message){
         Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+    }
+    //Shows & Hides ProgressDialog
+    private void showLoading(Boolean showLoading){
+        if(!showLoading){
+            if(progressDialog!=null)
+                progressDialog.dismiss();
+            return;
+        }
+        //Else showLoading==true
+        if(progressDialog==null){
+            progressDialog = new ProgressDialog(getActivity());
+            progressDialog.setMessage("Please wait...");
+        }
+        progressDialog.show();
+    }
+    //Sets the title of ProgressDialog
+    private void setLoadingTitle(String title){
+        if(progressDialog==null)
+            progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage(title);
     }
 }

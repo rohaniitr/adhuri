@@ -1,20 +1,21 @@
 package in.rohansarkar.adhuri.Model.Data;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class UserClosePostData {
+public class OpenPostData implements Serializable {
     private String _id;
     private String content;
     private String time;
     private String userId;
     private String name;
     private String image;
-    private ArrayList<String> suggestorImages;
+    private String suggestorName;
     private int suggestorCount;
     private ArrayList<String> tags;
 
-    public UserClosePostData(String id, ArrayList<String> tags, String content, String time, String userId, String name,
-                             String image, ArrayList<String> suggestorImages, int suggestorCount) {
+    public OpenPostData(String id, ArrayList<String> tags, String content, String time, String userId, String name, String image,
+                        String suggestorName, int suggestorCount) {
         this._id = id;
         this.tags = tags;
         this.content = content;
@@ -22,7 +23,7 @@ public class UserClosePostData {
         this.userId = userId;
         this.name = name;
         this.image = image;
-        this.suggestorImages = suggestorImages;
+        this.suggestorName = suggestorName;
         this.suggestorCount = suggestorCount;
     }
 
@@ -44,12 +45,13 @@ public class UserClosePostData {
     public String getImage() {
         return image;
     }
+    public String getSuggestorName() {
+        return suggestorName;
+    }
     public int getSuggestorCount() {
         return suggestorCount;
     }
-    public ArrayList<String> getSuggestorImages() {
-        return suggestorImages;
-    }
+
     public String getUserId() {
         return userId;
     }

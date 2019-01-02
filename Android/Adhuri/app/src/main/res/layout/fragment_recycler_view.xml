@@ -5,7 +5,8 @@
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:id="@+id/recycler_view" android:background="@color/recyclerBg"/>
+        android:id="@+id/recycler_view" android:background="@color/recyclerBg"
+        android:nestedScrollingEnabled="true" android:overScrollMode="never"/>
 
     <TextView
         android:layout_width="wrap_content" android:layout_height="wrap_content"

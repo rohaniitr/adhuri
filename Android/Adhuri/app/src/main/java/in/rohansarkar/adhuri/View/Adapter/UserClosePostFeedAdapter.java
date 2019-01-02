@@ -13,18 +13,18 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 import androidx.navigation.NavController;
-import in.rohansarkar.adhuri.Model.Data.UserClosePostData;
+import in.rohansarkar.adhuri.Model.Data.ClosePostData;
 import in.rohansarkar.adhuri.R;
 import in.rohansarkar.adhuri.Util.Util;
 
 public class UserClosePostFeedAdapter extends RecyclerView.Adapter<UserClosePostFeedAdapter.MyViewHolder> {
 
     private Context context;
-    private ArrayList<UserClosePostData> postData;
+    private ArrayList<ClosePostData> postData;
     private LayoutInflater inflater;
     private NavController navController;
 
-    public UserClosePostFeedAdapter(Context context, NavController navController, ArrayList<UserClosePostData> postData) {
+    public UserClosePostFeedAdapter(Context context, NavController navController, ArrayList<ClosePostData> postData) {
         this.context = context;
         this.navController = navController;
         this.postData = postData;

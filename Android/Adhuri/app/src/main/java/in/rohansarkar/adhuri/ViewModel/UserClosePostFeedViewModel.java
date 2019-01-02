@@ -5,12 +5,11 @@ import android.arch.lifecycle.ViewModel;
 
 import java.util.ArrayList;
 
-import in.rohansarkar.adhuri.Model.Data.UserClosePostData;
-import in.rohansarkar.adhuri.Model.Data.UserOpenPostData;
+import in.rohansarkar.adhuri.Model.Data.ClosePostData;
 import in.rohansarkar.adhuri.Model.Repositories.UserModel;
 
 public class UserClosePostFeedViewModel extends ViewModel {
-    private MutableLiveData<ArrayList<UserClosePostData>> postData;
+    private MutableLiveData<ArrayList<ClosePostData>> postData;
     private MutableLiveData<Boolean> showLoading;
     private MutableLiveData<String> fragmentMessage;
     private UserModel userModel;
@@ -26,7 +25,7 @@ public class UserClosePostFeedViewModel extends ViewModel {
         userModel.getUserClosePost(userId, token, postData, showLoading, fragmentMessage);
     }
 
-    public MutableLiveData<ArrayList<UserClosePostData>> getPostData() {
+    public MutableLiveData<ArrayList<ClosePostData>> getPostData() {
         if(postData == null)
             postData = new MutableLiveData<>();
         return postData;

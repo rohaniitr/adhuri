@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import in.rohansarkar.adhuri.R;
+import in.rohansarkar.adhuri.Util.PrefUtil;
 import in.rohansarkar.adhuri.View.Interface.HomeInterface;
 
 public class HomeFragment extends Fragment {
@@ -57,23 +58,27 @@ public class HomeFragment extends Fragment {
 
         switch (item.getItemId()) {
             case R.id.action_tags:
-                pushFragment(new TagFragment());
+                pushFragment(new TagFragment(), null);
                 break;
             case R.id.action_home:
-                pushFragment(new FeedFragment());
+                pushFragment(new FeedFragment(), null);
                 break;
             case R.id.action_profile:
 //                Send data with fragment
 //                Bundle args = new Bundle();
 //                args.putInt(context.getResources().getString(R.string.CURRENT_TIME), position);
 //                navController.navigate(R.id.action_videoListFragment_to_videoPlayerFragment, args);
-                pushFragment(new ProfileFragment());
+                Bundle bundle = new Bundle();
+                bundle.putString(getString(R.string.USER_ID), PrefUtil.getUserInfo(getActivity()).get_id());
+                pushFragment(new ProfileFragment(), bundle);
                 break;
         }
     }
-    protected void pushFragment(Fragment fragment) {
+    protected void pushFragment(Fragment fragment, Bundle bundle) {
         if (fragment == null)
             return;
+        if(bundle!=null)
+            fragment.setArguments(bundle);
 
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         if (fragmentManager != null) {

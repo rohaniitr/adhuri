@@ -5,7 +5,6 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,7 +25,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import in.rohansarkar.adhuri.Model.Data.LoginData;
 import in.rohansarkar.adhuri.Model.Data.SuggestionData;
-import in.rohansarkar.adhuri.Model.Data.UserOpenPostData;
+import in.rohansarkar.adhuri.Model.Data.OpenPostData;
 import in.rohansarkar.adhuri.R;
 import in.rohansarkar.adhuri.Util.PrefUtil;
 import in.rohansarkar.adhuri.Util.Util;
@@ -37,16 +36,15 @@ public class OpenPostFragment extends Fragment implements View.OnClickListener{
     private RecyclerView rvSuggestions;
     private TextView tvFragmentMessage;
     private ProgressBar pbLoading;
-    private UserOpenPostData postData;
+    private OpenPostData postData;
     private OpenPostAdapter suggestionAdapter;
     private ArrayList<SuggestionData> suggestionList;
     private OpenPostViewModel viewModel;
     private NavController navController;
     private LoginData userInfo;
-    private ImageView ivProfileImage;
+    private ImageView ivProfileImage, ivAddSuggestion;
     private TextView tvName, tvTime, tvContent;
     private EditText etSuggestion;
-    private FloatingActionButton fabAddSuggestion;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -64,7 +62,7 @@ public class OpenPostFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-            case R.id.fabAddSuggestion:
+            case R.id.ivAddSuggestion:
                 showToast("Adding " + etSuggestion.getText().toString());
                 break;
         }
@@ -82,9 +80,9 @@ public class OpenPostFragment extends Fragment implements View.OnClickListener{
         tvTime = view.findViewById(R.id.tvTime);
         tvContent = view.findViewById(R.id.tvContent);
         etSuggestion = view.findViewById(R.id.etSuggestion);
-        fabAddSuggestion = view.findViewById(R.id.fabAddSuggestion);
+        ivAddSuggestion = view.findViewById(R.id.ivAddSuggestion);
 
-        fabAddSuggestion.setOnClickListener(this);
+        ivAddSuggestion.setOnClickListener(this);
 
         suggestionList = new ArrayList<>();
     }
@@ -140,7 +138,7 @@ public class OpenPostFragment extends Fragment implements View.OnClickListener{
             return;
         }
 
-        postData = (UserOpenPostData) bundle.getSerializable(this.getResources().getString(R.string.PASS_POST));
+        postData = (OpenPostData) bundle.getSerializable(this.getResources().getString(R.string.PASS_POST));
         if(postData==null) {
             showToast("Ünable to open this post");
             navController.popBackStack();

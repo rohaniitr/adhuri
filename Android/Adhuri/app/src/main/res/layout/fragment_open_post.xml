@@ -61,19 +61,19 @@
         android:layout_width="match_parent" android:layout_height="wrap_content"
         android:layout_marginBottom="8sp" android:layout_marginLeft="12sp"
         android:layout_marginRight="12sp" android:layout_marginTop="8sp"
-        android:id="@+id/lSuggestion" android:layout_alignParentBottom="true">
+        android:id="@+id/lSuggestion" android:layout_alignParentBottom="true"
+        android:background="@color/white">
         <EditText
             android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:id="@+id/etSuggestion" android:layout_toLeftOf="@+id/fabAddSuggestion"
+            android:id="@+id/etSuggestion" android:layout_toLeftOf="@+id/ivAddSuggestion"
             android:textColor="@color/textBlack" android:textSize="15sp"
             android:singleLine="false" android:maxLines="4"
             android:hint="@string/suggestion_hint" android:inputType="textMultiLine|textCapSentences"/>
-        <android.support.design.widget.FloatingActionButton
-            android:layout_width="wrap_content" android:layout_height="wrap_content"
-            app:fabSize="mini" android:background="@drawable/button_submit"
-            android:src="@drawable/icon_send" android:tint="@color/white"
-            android:id="@+id/fabAddSuggestion" android:layout_alignParentRight="true"
-            app:elevation="0sp" android:layout_centerVertical="true"/>
+        <ImageView
+            android:layout_width="26sp" android:layout_height="26sp"
+            android:id="@+id/ivAddSuggestion" android:background="@drawable/icon_send"
+            android:layout_alignParentRight="true" android:layout_centerVertical="true"
+            android:layout_marginLeft="8sp" android:layout_marginRight="8sp"/>
     </RelativeLayout>
 
 </RelativeLayout>

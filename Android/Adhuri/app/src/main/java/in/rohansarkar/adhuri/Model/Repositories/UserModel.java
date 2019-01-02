@@ -4,11 +4,9 @@ import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -17,9 +15,9 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 
 import in.rohansarkar.adhuri.Model.Data.SuccessData;
-import in.rohansarkar.adhuri.Model.Data.SuggestionData;
-import in.rohansarkar.adhuri.Model.Data.UserClosePostData;
-import in.rohansarkar.adhuri.Model.Data.UserOpenPostData;
+import in.rohansarkar.adhuri.Model.Data.ClosePostData;
+import in.rohansarkar.adhuri.Model.Data.UserData;
+import in.rohansarkar.adhuri.Model.Data.OpenPostData;
 import in.rohansarkar.adhuri.Model.Retrofit.RepoClient;
 import in.rohansarkar.adhuri.Model.Retrofit.RepoInterface;
 import in.rohansarkar.adhuri.Util.Util;
@@ -36,6 +34,43 @@ import static in.rohansarkar.adhuri.Util.Util.USER_TEMP_IMAGE_NAME;
 
 public class UserModel {
     private String LOG_TAG = this.getClass().getName();
+
+    public void getFeedOpenPost(final String token, final MutableLiveData<ArrayList<OpenPostData>> postData,
+                                final MutableLiveData<Boolean> showLoading, final MutableLiveData<String> fragmentMessage){
+        RepoInterface service = RepoClient.getRetrofitInstance().create(RepoInterface.class);
+        Call<ArrayList<OpenPostData>> call = service.getFeedOpenPosts(token);
+        showLoading.setValue(true);
+        fragmentMessage.setValue("Fetching Open Posts...");
+
+        call.enqueue(new Callback<ArrayList<OpenPostData>>() {
+            @Override
+            public void onResponse(Call<ArrayList<OpenPostData>> call, Response<ArrayList<OpenPostData>> response) {
+                showLoading.setValue(false);
+                if((!response.isSuccessful()) || (response.code()!=200)) {
+                    fragmentMessage.setValue("There is some problem fetching posts");
+                    Log.d(LOG_TAG, "getFeedOpenPost onResponse Failure : " + response.code() + " " + response.isSuccessful());
+                    return;
+                }
+
+                Log.d(LOG_TAG, "getFeedOpenPost onResponse Success");
+                if(response.body()==null || response.body().size()<=0) {
+                    fragmentMessage.setValue("No Open Posts");
+                    postData.setValue(null);
+                }
+                else {
+                    fragmentMessage.setValue(null);
+                    postData.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<OpenPostData>> call, Throwable t) {
+                showLoading.setValue(false);
+                fragmentMessage.setValue("Unable to fetch posts");
+                Log.d(LOG_TAG, "getFeedOpenPost onFailure");
+            }
+        });
+    }
 
     public void saveUserInfo(final String name, String gender, String bio, final String token,
                              final MutableLiveData<Boolean> showLoading, MutableLiveData<String> progressTitle,
@@ -70,12 +105,12 @@ public class UserModel {
     }
 
     public void updateTags(final ArrayList<String> tagList, final String token,
-                           final MutableLiveData<Boolean> showLoading, MutableLiveData<String> progressTitle,
+                           final MutableLiveData<Boolean> showLoading, MutableLiveData<String> loadingMessage,
                            final MutableLiveData<String> toastMessage, final MutableLiveData<Boolean> tagsUpadated){
         RepoInterface service = RepoClient.getRetrofitInstance().create(RepoInterface.class);
         Call<SuccessData> call = service.updateTags(tagList, token);
         showLoading.setValue(true);
-        progressTitle.setValue("Updating Tags...");
+        loadingMessage.setValue("Updating Tags...");
 
         call.enqueue(new Callback<SuccessData>() {
             @Override
@@ -102,7 +137,7 @@ public class UserModel {
     }
 
     public void uploadImage(final Context context, Bitmap imageBitmap, String token, final MutableLiveData<Boolean> showLoading,
-                            MutableLiveData<String> progressTitle, final MutableLiveData<String> toastMessage,
+                            MutableLiveData<String> loadingMessage, final MutableLiveData<String> toastMessage,
                             final MutableLiveData<Boolean> imageChanged){
         try {
             saveImageLocal(context, imageBitmap, context.getFilesDir()+File.separator+USER_TEMP_IMAGE_NAME);
@@ -116,7 +151,7 @@ public class UserModel {
             RepoInterface service = RepoClient.getRetrofitInstance().create(RepoInterface.class);
             Call<ResponseBody> req = service.saveImage(body, name, token);
             showLoading.setValue(true);
-            progressTitle.setValue("Uploading Image...");
+            loadingMessage.setValue("Uploading Image...");
 
             req.enqueue(new Callback<ResponseBody>() {
                 @Override
@@ -143,6 +178,40 @@ public class UserModel {
             e.printStackTrace();
             toastMessage.setValue("Unable to update Picture");
         }
+    }
+
+    public void getUserInfo(final String userId, final String token,
+                            final MutableLiveData<UserData> userData, final MutableLiveData<Boolean> showLoading,
+                            final MutableLiveData<String> loadingMessage, final MutableLiveData<String> toastMessage){
+        RepoInterface service = RepoClient.getRetrofitInstance().create(RepoInterface.class);
+        Call<UserData> call = service.getUserInfo(userId, token);
+        showLoading.setValue(true);
+        loadingMessage.setValue("Fetching User Info...");
+
+        call.enqueue(new Callback<UserData>() {
+            @Override
+            public void onResponse(Call<UserData> call, Response<UserData> response) {
+                showLoading.setValue(false);
+                if((!response.isSuccessful()) || (response.code()!=200)) {
+                    toastMessage.setValue("There is some problem finding User");
+                    Log.d(LOG_TAG, "getUserInfo onResponse Failure : " + response.code() + " " + response.isSuccessful());
+                    return;
+                }
+
+                Log.d(LOG_TAG, "getUserInfo onResponse Success");
+                if(response.body()==null)
+                    userData.setValue(null);
+                else
+                    userData.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<UserData> call, Throwable t) {
+                showLoading.setValue(false);
+                Log.d(LOG_TAG, "getUserInfo onFailure");
+                toastMessage.setValue("Unable to find User");
+            }
+        });
     }
 
     public void downloadImage(final Context context, String imageName, final String token, final MutableLiveData<String> toastMessage,
@@ -175,16 +244,16 @@ public class UserModel {
     }
 
     public void getUserOpenPost(final String userId, final String token,
-                                final MutableLiveData<ArrayList<UserOpenPostData>> postData,
+                                final MutableLiveData<ArrayList<OpenPostData>> postData,
                                 final MutableLiveData<Boolean> showLoading, final MutableLiveData<String> fragmentMessage){
         RepoInterface service = RepoClient.getRetrofitInstance().create(RepoInterface.class);
-        Call<ArrayList<UserOpenPostData>> call = service.getUserOpenPosts(userId, token);
+        Call<ArrayList<OpenPostData>> call = service.getUserOpenPosts(userId, token);
         showLoading.setValue(true);
         fragmentMessage.setValue("Fetching User Open Posts...");
 
-        call.enqueue(new Callback<ArrayList<UserOpenPostData>>() {
+        call.enqueue(new Callback<ArrayList<OpenPostData>>() {
             @Override
-            public void onResponse(Call<ArrayList<UserOpenPostData>> call, Response<ArrayList<UserOpenPostData>> response) {
+            public void onResponse(Call<ArrayList<OpenPostData>> call, Response<ArrayList<OpenPostData>> response) {
                 showLoading.setValue(false);
                 if((!response.isSuccessful()) || (response.code()!=200)) {
                     fragmentMessage.setValue("There is some problem fetching posts");
@@ -204,7 +273,7 @@ public class UserModel {
             }
 
             @Override
-            public void onFailure(Call<ArrayList<UserOpenPostData>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<OpenPostData>> call, Throwable t) {
                 showLoading.setValue(false);
                 fragmentMessage.setValue("Unable to fetch posts");
                 Log.d(LOG_TAG, "getUserOpenPost onFailure");
@@ -213,26 +282,26 @@ public class UserModel {
     }
 
     public void getUserClosePost(final String userId, final String token,
-                                final MutableLiveData<ArrayList<UserClosePostData>> postData,
+                                final MutableLiveData<ArrayList<ClosePostData>> postData,
                                 final MutableLiveData<Boolean> showLoading, final MutableLiveData<String> fragmentMessage){
         RepoInterface service = RepoClient.getRetrofitInstance().create(RepoInterface.class);
-        Call<ArrayList<UserClosePostData>> call = service.getUserClosePosts(userId, token);
+        Call<ArrayList<ClosePostData>> call = service.getUserClosePosts(userId, token);
         showLoading.setValue(true);
         fragmentMessage.setValue("Fetching User Close Posts...");
 
-        call.enqueue(new Callback<ArrayList<UserClosePostData>>() {
+        call.enqueue(new Callback<ArrayList<ClosePostData>>() {
             @Override
-            public void onResponse(Call<ArrayList<UserClosePostData>> call, Response<ArrayList<UserClosePostData>> response) {
+            public void onResponse(Call<ArrayList<ClosePostData>> call, Response<ArrayList<ClosePostData>> response) {
                 showLoading.setValue(false);
                 if((!response.isSuccessful()) || (response.code()!=200)) {
                     fragmentMessage.setValue("There is some problem fetching posts");
-                    Log.d(LOG_TAG, "getUserOpenPost onResponse Failure : " + response.code() + " " + response.isSuccessful());
+                    Log.d(LOG_TAG, "getUserClosePost onResponse Failure : " + response.code() + " " + response.isSuccessful());
                     return;
                 }
 
-                Log.d(LOG_TAG, "getUserOpenPost onResponse Success");
+                Log.d(LOG_TAG, "getUserClosePost onResponse Success");
                 if(response.body()==null || response.body().size()<=0) {
-                    fragmentMessage.setValue("No Open Posts from User");
+                    fragmentMessage.setValue("No Close Posts from User");
                     postData.setValue(null);
                 }
                 else {
@@ -242,7 +311,7 @@ public class UserModel {
             }
 
             @Override
-            public void onFailure(Call<ArrayList<UserClosePostData>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<ClosePostData>> call, Throwable t) {
                 showLoading.setValue(false);
                 fragmentMessage.setValue("Unable to fetch posts");
                 Log.d(LOG_TAG, "getUserOpenPost onFailure");

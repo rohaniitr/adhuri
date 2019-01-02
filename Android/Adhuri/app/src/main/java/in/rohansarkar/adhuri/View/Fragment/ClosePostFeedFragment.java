@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import in.rohansarkar.adhuri.Model.Data.LoginData;
-import in.rohansarkar.adhuri.Model.Data.UserClosePostData;
+import in.rohansarkar.adhuri.Model.Data.ClosePostData;
 import in.rohansarkar.adhuri.R;
 import in.rohansarkar.adhuri.Util.PrefUtil;
 import in.rohansarkar.adhuri.View.Adapter.UserClosePostFeedAdapter;
@@ -30,7 +30,7 @@ public class ClosePostFeedFragment extends Fragment {
     private TextView tvFragmentMessage;
     private ProgressBar pbLoading;
     private UserClosePostFeedAdapter postAdapter;
-    private ArrayList<UserClosePostData> postData;
+    private ArrayList<ClosePostData> postData;
     private UserClosePostFeedViewModel viewModel;
     private NavController navController;
     private LoginData userInfo;
@@ -64,10 +64,10 @@ public class ClosePostFeedFragment extends Fragment {
         userInfo = PrefUtil.getUserInfo(getActivity());
     }
     private void observeViewModel(){
-        viewModel.getPostData().observe(this, new Observer<ArrayList<UserClosePostData>>() {
+        viewModel.getPostData().observe(this, new Observer<ArrayList<ClosePostData>>() {
             @Override
-            public void onChanged(@Nullable ArrayList<UserClosePostData> userClosePostData) {
-                postDataChanged(userClosePostData);
+            public void onChanged(@Nullable ArrayList<ClosePostData> closePostData) {
+                postDataChanged(closePostData);
             }
         });
         viewModel.getFragmentMessage().observe(this, new Observer<String>() {
@@ -109,14 +109,14 @@ public class ClosePostFeedFragment extends Fragment {
         tvFragmentMessage.setText(message);
         tvFragmentMessage.setVisibility(View.VISIBLE);
     }
-    private void postDataChanged(ArrayList<UserClosePostData> userClosePostData) {
-        if(userClosePostData==null){
+    private void postDataChanged(ArrayList<ClosePostData> closePostData) {
+        if(closePostData ==null){
             rvPostView.setVisibility(View.GONE);
             return;
         }
         rvPostView.setVisibility(View.VISIBLE);
         postData.clear();
-        postData.addAll(userClosePostData);
+        postData.addAll(closePostData);
         postAdapter.notifyDataSetChanged();
     }
 }

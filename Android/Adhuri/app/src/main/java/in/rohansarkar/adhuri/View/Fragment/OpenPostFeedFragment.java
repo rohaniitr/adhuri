@@ -13,13 +13,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import in.rohansarkar.adhuri.Model.Data.LoginData;
-import in.rohansarkar.adhuri.Model.Data.UserOpenPostData;
+import in.rohansarkar.adhuri.Model.Data.OpenPostData;
 import in.rohansarkar.adhuri.R;
 import in.rohansarkar.adhuri.Util.PrefUtil;
 import in.rohansarkar.adhuri.View.Adapter.UserOpenPostFeedAdapter;
@@ -30,10 +31,11 @@ public class OpenPostFeedFragment extends Fragment {
     private TextView tvFragmentMessage;
     private ProgressBar pbLoading;
     private UserOpenPostFeedAdapter postAdapter;
-    private ArrayList<UserOpenPostData> postData;
+    private ArrayList<OpenPostData> postData;
     private UserOpenPostFeedViewModel viewModel;
     private NavController navController;
-    private LoginData userInfo;
+    private LoginData adminInfo;
+    private String userId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -45,12 +47,25 @@ public class OpenPostFeedFragment extends Fragment {
         initialise(view);
         observeViewModel();
         setRecyclerView();
-        getData();
+        getPostData();
     }
 
     //Get data from Server
-    private void getData() {
-        viewModel.getUserOpenPosts(userInfo.get_id(), userInfo.getToken());
+    private void getPostData() {
+        //Get user info based on userId received
+        if(this.getArguments() == null){
+            viewModel.getFeedOpenPosts(adminInfo.getToken());
+            return;
+        }
+
+        userId = this.getArguments().getString(getResources().getString(R.string.USER_ID));
+        if(userId == null){
+            showToast("Unable to get the user data");
+            navController.popBackStack();
+            return;
+        }
+
+        viewModel.getUserOpenPosts(adminInfo.get_id(), adminInfo.getToken());
     }
     private void initialise(View view) {
         viewModel = ViewModelProviders.of(getActivity()).get(UserOpenPostFeedViewModel.class);
@@ -61,13 +76,13 @@ public class OpenPostFeedFragment extends Fragment {
         pbLoading = view.findViewById(R.id.pbLoading);
 
         postData = new ArrayList<>();
-        userInfo = PrefUtil.getUserInfo(getActivity());
+        adminInfo = PrefUtil.getUserInfo(getActivity());
     }
     private void observeViewModel(){
-        viewModel.getPostData().observe(this, new Observer<ArrayList<UserOpenPostData>>() {
+        viewModel.getPostData().observe(this, new Observer<ArrayList<OpenPostData>>() {
             @Override
-            public void onChanged(@Nullable ArrayList<UserOpenPostData> userOpenPostData) {
-                postDataChanged(userOpenPostData);
+            public void onChanged(@Nullable ArrayList<OpenPostData> openPostData) {
+                postDataChanged(openPostData);
             }
         });
         viewModel.getFragmentMessage().observe(this, new Observer<String>() {
@@ -108,14 +123,17 @@ public class OpenPostFeedFragment extends Fragment {
         tvFragmentMessage.setText(message);
         tvFragmentMessage.setVisibility(View.VISIBLE);
     }
-    private void postDataChanged(ArrayList<UserOpenPostData> userOpenPostData) {
-        if(userOpenPostData==null){
+    private void postDataChanged(ArrayList<OpenPostData> openPostData) {
+        if(openPostData ==null){
             rvPostView.setVisibility(View.GONE);
             return;
         }
         rvPostView.setVisibility(View.VISIBLE);
         postData.clear();
-        postData.addAll(userOpenPostData);
+        postData.addAll(openPostData);
         postAdapter.notifyDataSetChanged();
+    }
+    private void showToast(String message){
+        Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
     }
 }

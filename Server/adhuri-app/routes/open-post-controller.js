@@ -189,6 +189,9 @@ router.get('/getFeed', function(req,res){
         console.log("Missing TAG : " + tags[i]);
         continue;
       }
+      //Rohan
+      //Need to sort the posts by time.
+      //Need to place upper limit for list of documents.
       promiseList.push(HashMapType.find().select("postId").exec());
     }
     return Promise.all(promiseList).catch(function(error){console.log(error);});
@@ -204,14 +207,12 @@ router.get('/getFeed', function(req,res){
       throw "Post not found";
 
     postList=data;
-    console.log("ROHAN : " + postList);
     // Add User data here
     promiseList = [];
     postList.forEach(function(post){
-      promiseList.push(Users.findOne({_id:post.userId}).select("name picture").exec().then(function(userData){
+      promiseList.push(Users.findOne({_id:post.userId}).select("name image").exec().then(function(userData){
         post.name = userData.name;
-        post.picture = userData.picture;
-        delete post.userId;
+        post.image = userData.image;
       }));
     });
     return Promise.all(promiseList);
@@ -289,7 +290,6 @@ router.get('/getUserPosts/:userId', function(req,res){
     }
 
     return Promise.all(promiseList).then(function(userList){
-      console.log("ROHAN : " + userList);
       return userList;
     }).catch(function(err){console.log(err);});
   }).then(function(userMatrix){
