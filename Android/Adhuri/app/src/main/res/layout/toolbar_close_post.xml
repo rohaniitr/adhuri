@@ -16,7 +16,7 @@
         <TextView
             android:layout_width="wrap_content" android:layout_height="wrap_content"
             android:textColor="@color/textPureWhite" android:textSize="20sp"
-            android:layout_toRightOf="@+id/ivBack" android:text="@string/close_post"
+            android:layout_toRightOf="@+id/ivBack" android:text="@string/edit_post"
             android:layout_centerVertical="true" android:layout_marginLeft="8sp"/>
 
         <ImageView

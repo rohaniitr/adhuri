@@ -123,7 +123,7 @@ router.get('/getFeed', function(req,res){
     promiseList = [];
     for(var i=0; i<userMatrix.length; i++){
       var userIds = userMatrix[i].map(function(ids){return ids.userId});
-      promiseList.push(Users.find({_id:userIds}).select("picture -_id").exec());
+      promiseList.push(Users.find({_id:userIds}).select("name image -_id").exec());
     }
 
     return Promise.all(promiseList).then(function(userList){
@@ -131,20 +131,26 @@ router.get('/getFeed', function(req,res){
       return userList;
     }).catch(function(err){console.log(err);});
   }).then(function(userMatrix){
-    //Add suggestion count & ax 3 suggestor picture
+    //Add suggestion count & one suggestor name
     for(var i=0; i<postList.length; i++){
       postList[i].suggestorCount = userMatrix[i].length;
-      //Get max 3 valid pics
-      postList[i].suggestorPics = userMatrix[i].map(function(user){
-        if(user.picture != null)
-          return user.picture;
-      });
+
+      if(userMatrix[i] == null)
+        continue;
+      if(userMatrix[i].length > 0)
+        postList[i].suggestorName = userMatrix[i][0].name;
+
+      for(var j=0; j<userMatrix[i].length; j++){
+        if(userMatrix[i][j].image != null){
+          postList[i].suggestorName = userMatrix[i][j].name;
+          postList[i].suggestorImage = userMatrix[i][j].image;
+          break;
+        }
+      }
       delete postList[i].suggestionId;
-      //Works on mongoose models too
-      // postList[i].suggestionId = undefined;
       console.log(postList[i]);
     }
-    console.log("postList : " + postList);
+    // console.log("postList : " + postList);
     res.status(200).json(postList);
   }).catch(function(error){
     console.log(error);

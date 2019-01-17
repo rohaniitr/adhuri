@@ -2,6 +2,7 @@ package in.rohansarkar.adhuri.View.Fragment;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -24,31 +25,31 @@ import java.util.ArrayList;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import in.rohansarkar.adhuri.Model.Data.LoginData;
+import in.rohansarkar.adhuri.Model.Data.PostData;
 import in.rohansarkar.adhuri.Model.Data.SuggestionData;
-import in.rohansarkar.adhuri.Model.Data.OpenPostData;
 import in.rohansarkar.adhuri.R;
 import in.rohansarkar.adhuri.Util.PrefUtil;
 import in.rohansarkar.adhuri.Util.Util;
-import in.rohansarkar.adhuri.View.Adapter.OpenPostAdapter;
-import in.rohansarkar.adhuri.ViewModel.OpenPostViewModel;
+import in.rohansarkar.adhuri.View.Adapter.SuggestionAdapter;
+import in.rohansarkar.adhuri.ViewModel.ViewOpenPostViewModel;
 
-public class OpenPostFragment extends Fragment implements View.OnClickListener{
+public class ViewOpenPostFragment extends Fragment implements View.OnClickListener{
     private RecyclerView rvSuggestions;
     private TextView tvFragmentMessage;
     private ProgressBar pbLoading;
-    private OpenPostData postData;
-    private OpenPostAdapter suggestionAdapter;
+    private PostData postData;
+    private SuggestionAdapter suggestionAdapter;
     private ArrayList<SuggestionData> suggestionList;
-    private OpenPostViewModel viewModel;
+    private ViewOpenPostViewModel viewModel;
     private NavController navController;
-    private LoginData userInfo;
+    private LoginData adminInfo;
     private ImageView ivProfileImage, ivAddSuggestion;
     private TextView tvName, tvTime, tvContent;
     private EditText etSuggestion;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_open_post, container, false);
+        return inflater.inflate(R.layout.fragment_view_open_post, container, false);
     }
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -69,7 +70,7 @@ public class OpenPostFragment extends Fragment implements View.OnClickListener{
     }
 
     private void initialise(View view) {
-        viewModel = ViewModelProviders.of(getActivity()).get(OpenPostViewModel.class);
+        viewModel = ViewModelProviders.of(getActivity()).get(ViewOpenPostViewModel.class);
         navController = Navigation.findNavController(view);
 
         rvSuggestions = view.findViewById(R.id.recycler_view);
@@ -110,7 +111,7 @@ public class OpenPostFragment extends Fragment implements View.OnClickListener{
         });
     }
     private void setRecyclerView(){
-        suggestionAdapter = new OpenPostAdapter(getActivity(), navController, suggestionList);
+        suggestionAdapter = new SuggestionAdapter(getActivity(), navController, suggestionList, null, null);
         rvSuggestions.setAdapter(suggestionAdapter);
         LinearLayoutManager postLayoutManager = new LinearLayoutManager(getActivity());
         rvSuggestions.setLayoutManager(postLayoutManager);
@@ -138,15 +139,15 @@ public class OpenPostFragment extends Fragment implements View.OnClickListener{
             return;
         }
 
-        postData = (OpenPostData) bundle.getSerializable(this.getResources().getString(R.string.PASS_POST));
+        postData = (PostData) bundle.getSerializable(this.getResources().getString(R.string.PASS_POST));
         if(postData==null) {
             showToast("Ünable to open this post");
             navController.popBackStack();
             return;
         }
 
-        userInfo = PrefUtil.getUserInfo(getActivity());
-        viewModel.getSuggestions(postData.get_id(), userInfo.getToken());
+        adminInfo = PrefUtil.getUserInfo(getActivity());
+        viewModel.getSuggestions(postData.get_id(), adminInfo.getToken());
     }
     //Shows & Hides Loading ProgressBar
     private void showLoading(){

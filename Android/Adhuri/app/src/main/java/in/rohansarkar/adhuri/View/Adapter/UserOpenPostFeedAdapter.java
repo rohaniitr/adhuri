@@ -2,8 +2,8 @@ package in.rohansarkar.adhuri.View.Adapter;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,26 +16,32 @@ import java.util.ArrayList;
 
 import androidx.navigation.NavController;
 import in.rohansarkar.adhuri.Model.Data.LoginData;
-import in.rohansarkar.adhuri.Model.Data.OpenPostData;
+import in.rohansarkar.adhuri.Model.Data.PostData;
 import in.rohansarkar.adhuri.R;
 import in.rohansarkar.adhuri.Util.PrefUtil;
 import in.rohansarkar.adhuri.Util.Util;
+import in.rohansarkar.adhuri.View.Utils.CustomAlertAction;
+import in.rohansarkar.adhuri.View.Utils.CustomAlertBox;
+import in.rohansarkar.adhuri.ViewModel.UserOpenPostFeedViewModel;
 
 public class UserOpenPostFeedAdapter extends RecyclerView.Adapter<UserOpenPostFeedAdapter.MyViewHolder> {
 
     private String LOG_TAG = this.getClass().getName();
     private Context context;
-    private ArrayList<OpenPostData> postData;
+    private ArrayList<PostData> postData;
     private LayoutInflater inflater;
     private NavController navController;
     private LoginData adminInfo;
+    private UserOpenPostFeedViewModel viewModel;
 
-    public UserOpenPostFeedAdapter(Context context, NavController navController, ArrayList<OpenPostData> postData) {
+    public UserOpenPostFeedAdapter(Context context, NavController navController, ArrayList<PostData> postData,
+                                   UserOpenPostFeedViewModel viewModel) {
         this.context = context;
         this.navController = navController;
         this.postData = postData;
         inflater = LayoutInflater.from(context);
         adminInfo = PrefUtil.getUserInfo(context);
+        this.viewModel = viewModel;
     }
     @Override
     public UserOpenPostFeedAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int position) {
@@ -50,16 +56,28 @@ public class UserOpenPostFeedAdapter extends RecyclerView.Adapter<UserOpenPostFe
         myViewHolder.tvTime.setText(postData.get(position).getTime());
         myViewHolder.tvContent.setText(postData.get(position).getContent());
 
+        //Set Suggestor Details
         if(postData.get(position).getSuggestorCount()<=0)
-            myViewHolder.tvSuggestionCount.setText(String.format(context.getString(R.string.sample_suggestion_count_0)));
+            myViewHolder.tvSuggCount.setText(String.format(context.getString(R.string.sample_suggestion_count_0)));
         else if(postData.get(position).getSuggestorCount()==1)
-            myViewHolder.tvSuggestionCount.setText(String.format(context.getString(R.string.sample_suggestion_count_1),
+            myViewHolder.tvSuggCount.setText(String.format(context.getString(R.string.sample_suggestion_count_1),
                     postData.get(position).getSuggestorName()));
         else
-            myViewHolder.tvSuggestionCount.setText(String.format(context.getString(R.string.sample_suggestion_count_2),
+            myViewHolder.tvSuggCount.setText(String.format(context.getString(R.string.sample_suggestion_count_2),
                     postData.get(position).getSuggestorName(), postData.get(position).getSuggestorCount()-1));
 
-        Log.d("asdf", Util.baseUrl + '/' + postData.get(position).getImage());
+        //Load Suggestor Image
+        if(postData.get(position).getSuggestorImage() != null) {
+            Picasso.get().load(Util.baseUrl + '/' + postData.get(position).getSuggestorImage())
+                    .into(myViewHolder.ivSuggImage);
+            myViewHolder.lSuggLayout.setVisibility(View.VISIBLE);
+        }
+        else{
+            myViewHolder.lSuggLayout.setVisibility(View.GONE);
+        }
+
+
+        //Load User Image
         if(postData.get(position).getImage() != null)
             Picasso.get().load(Util.baseUrl + '/' + postData.get(position).getImage()).into(myViewHolder.ivImage);
 
@@ -70,17 +88,17 @@ public class UserOpenPostFeedAdapter extends RecyclerView.Adapter<UserOpenPostFe
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(context.getResources().getString(R.string.PASS_POST), postData.get(position));
 
-                if(postData.get(position).getUserId()==adminInfo.get_id()) {
-                    //Open OpenPostEditFragment
-                    //navController.navigate(R.id.action_homeFragment_to_openPostFragment, bundle);
+                if(postData.get(position).getUserId().equals(adminInfo.get_id())) {
+                    //Admin Post. Open EditOpenPost.
+                    navController.navigate(R.id.action_homeFragment_to_editOpenPostFragment, bundle);
                 }
                 else {
-                    navController.navigate(R.id.action_homeFragment_to_openPostFragment, bundle);
+                    navController.navigate(R.id.action_homeFragment_to_viewOpenPostFragment, bundle);
                 }
             }
         };
         myViewHolder.tvContent.setOnClickListener(showOpenPostListener);
-        myViewHolder.tvSuggestionCount.setOnClickListener(showOpenPostListener);
+        myViewHolder.tvSuggCount.setOnClickListener(showOpenPostListener);
 
         //Open Profile
         View.OnClickListener showProfileListener = new View.OnClickListener() {
@@ -100,7 +118,7 @@ public class UserOpenPostFeedAdapter extends RecyclerView.Adapter<UserOpenPostFe
             myViewHolder.ivDeletePost.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                    launchDeletePostAlert(position);
                 }
             });
         }
@@ -114,18 +132,41 @@ public class UserOpenPostFeedAdapter extends RecyclerView.Adapter<UserOpenPostFe
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder{
-        TextView tvName, tvTime, tvTag, tvContent, tvSuggestionCount;
-        ImageView ivImage, ivDeletePost;
+        TextView tvName, tvTime, tvTag, tvContent, tvSuggCount;
+        ImageView ivImage, ivDeletePost, ivSuggImage;
+        View lSuggLayout;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             tvName = itemView.findViewById(R.id.tvName);
-            ivImage = itemView.findViewById(R.id.ivCircularImage);
+            ivImage = itemView.findViewById(R.id.lProfilePic).findViewById(R.id.ivCircularImage);
             ivDeletePost = itemView.findViewById(R.id.ivDeletePost);
             tvTag = itemView.findViewById(R.id.tvTag);
             tvTime = itemView.findViewById(R.id.tvTime);
             tvContent = itemView.findViewById(R.id.tvContent);
-            tvSuggestionCount = itemView.findViewById(R.id.tvSuggestionCount);
+            tvSuggCount = itemView.findViewById(R.id.tvSuggCount);
+            ivSuggImage = itemView.findViewById(R.id.lCollaborator).findViewById(R.id.ivCircularImage);
+            lSuggLayout = itemView.findViewById(R.id.lCollaborator);
         }
+    }
+
+    private void launchDeletePostAlert(int position){
+        CustomAlertBox alertBox = new CustomAlertBox();
+        Bundle bundle = new Bundle();
+        bundle.putInt(context.getString(R.string.alert_title_id), R.string.delete_post);
+        bundle.putInt(context.getString(R.string.alert_icon_id), R.drawable.icon_delete);
+        bundle.putInt(context.getString(R.string.alert_message_id), R.string.delete_post_alert_content);
+        bundle.putSerializable(context.getString(R.string.alert_action_object), new CustomAlertAction() {
+            @Override
+            public void onSuccess() {
+                viewModel.deletePost();
+            }
+            @Override
+            public void onError() {
+
+            }
+        });
+        alertBox.setArguments(bundle);
+        alertBox.show(((FragmentActivity)context).getSupportFragmentManager(), null);
     }
 }

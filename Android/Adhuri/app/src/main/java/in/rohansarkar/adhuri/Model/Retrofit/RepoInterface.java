@@ -3,6 +3,7 @@ package in.rohansarkar.adhuri.Model.Retrofit;
 import java.util.ArrayList;
 
 import in.rohansarkar.adhuri.Model.Data.LoginData;
+import in.rohansarkar.adhuri.Model.Data.PostData;
 import in.rohansarkar.adhuri.Model.Data.SuccessData;
 import in.rohansarkar.adhuri.Model.Data.SuggestionData;
 import in.rohansarkar.adhuri.Model.Data.ClosePostData;
@@ -33,7 +34,7 @@ public interface RepoInterface {
 
     //Feed
     @GET("/openPost/getFeed")
-    Call<ArrayList<OpenPostData>> getFeedOpenPosts(@Header("x-access-token") String token);
+    Call<ArrayList<PostData>> getFeedOpenPosts(@Header("x-access-token") String token);
     @GET("/closePost/getFeed")
     Call<ArrayList<OpenPostData>> getFeedClosePosts(@Header("x-access-token") String token);
 
@@ -58,7 +59,7 @@ public interface RepoInterface {
     Call<SuccessData> updateTags(@Field("tags")ArrayList<String> tags, @Header("x-access-token") String token);
 
     @GET("/openPost/getUserPosts/{userId}")
-    Call<ArrayList<OpenPostData>> getUserOpenPosts(@Path("userId") String userId, @Header("x-access-token") String token);
+    Call<ArrayList<PostData>> getUserOpenPosts(@Path("userId") String userId, @Header("x-access-token") String token);
     @GET("/closePost/getUserPosts/{userId}")
     Call<ArrayList<ClosePostData>> getUserClosePosts(@Path("userId") String userId, @Header("x-access-token") String token);
     @GET("/suggestion/get/{postId}")

@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import in.rohansarkar.adhuri.Model.Data.LoginData;
-import in.rohansarkar.adhuri.Model.Data.OpenPostData;
+import in.rohansarkar.adhuri.Model.Data.PostData;
 import in.rohansarkar.adhuri.R;
 import in.rohansarkar.adhuri.Util.PrefUtil;
 import in.rohansarkar.adhuri.View.Adapter.UserOpenPostFeedAdapter;
@@ -31,7 +31,7 @@ public class OpenPostFeedFragment extends Fragment {
     private TextView tvFragmentMessage;
     private ProgressBar pbLoading;
     private UserOpenPostFeedAdapter postAdapter;
-    private ArrayList<OpenPostData> postData;
+    private ArrayList<PostData> postData;
     private UserOpenPostFeedViewModel viewModel;
     private NavController navController;
     private LoginData adminInfo;
@@ -79,9 +79,9 @@ public class OpenPostFeedFragment extends Fragment {
         adminInfo = PrefUtil.getUserInfo(getActivity());
     }
     private void observeViewModel(){
-        viewModel.getPostData().observe(this, new Observer<ArrayList<OpenPostData>>() {
+        viewModel.getPostData().observe(this, new Observer<ArrayList<PostData>>() {
             @Override
-            public void onChanged(@Nullable ArrayList<OpenPostData> openPostData) {
+            public void onChanged(@Nullable ArrayList<PostData> openPostData) {
                 postDataChanged(openPostData);
             }
         });
@@ -102,7 +102,7 @@ public class OpenPostFeedFragment extends Fragment {
         });
     }
     private void setRecyclerView(){
-        postAdapter = new UserOpenPostFeedAdapter(getActivity(), navController,  postData);
+        postAdapter = new UserOpenPostFeedAdapter(getActivity(), navController,  postData, viewModel);
         rvPostView.setAdapter(postAdapter);
         LinearLayoutManager postLayoutManager = new LinearLayoutManager(getActivity());
         rvPostView.setLayoutManager(postLayoutManager);
@@ -123,7 +123,7 @@ public class OpenPostFeedFragment extends Fragment {
         tvFragmentMessage.setText(message);
         tvFragmentMessage.setVisibility(View.VISIBLE);
     }
-    private void postDataChanged(ArrayList<OpenPostData> openPostData) {
+    private void postDataChanged(ArrayList<PostData> openPostData) {
         if(openPostData ==null){
             rvPostView.setVisibility(View.GONE);
             return;

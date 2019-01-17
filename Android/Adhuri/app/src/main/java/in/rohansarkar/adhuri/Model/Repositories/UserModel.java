@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 
+import in.rohansarkar.adhuri.Model.Data.PostData;
 import in.rohansarkar.adhuri.Model.Data.SuccessData;
 import in.rohansarkar.adhuri.Model.Data.ClosePostData;
 import in.rohansarkar.adhuri.Model.Data.UserData;
@@ -35,16 +36,16 @@ import static in.rohansarkar.adhuri.Util.Util.USER_TEMP_IMAGE_NAME;
 public class UserModel {
     private String LOG_TAG = this.getClass().getName();
 
-    public void getFeedOpenPost(final String token, final MutableLiveData<ArrayList<OpenPostData>> postData,
+    public void getFeedOpenPost(final String token, final MutableLiveData<ArrayList<PostData>> postData,
                                 final MutableLiveData<Boolean> showLoading, final MutableLiveData<String> fragmentMessage){
         RepoInterface service = RepoClient.getRetrofitInstance().create(RepoInterface.class);
-        Call<ArrayList<OpenPostData>> call = service.getFeedOpenPosts(token);
+        Call<ArrayList<PostData>> call = service.getFeedOpenPosts(token);
         showLoading.setValue(true);
         fragmentMessage.setValue("Fetching Open Posts...");
 
-        call.enqueue(new Callback<ArrayList<OpenPostData>>() {
+        call.enqueue(new Callback<ArrayList<PostData>>() {
             @Override
-            public void onResponse(Call<ArrayList<OpenPostData>> call, Response<ArrayList<OpenPostData>> response) {
+            public void onResponse(Call<ArrayList<PostData>> call, Response<ArrayList<PostData>> response) {
                 showLoading.setValue(false);
                 if((!response.isSuccessful()) || (response.code()!=200)) {
                     fragmentMessage.setValue("There is some problem fetching posts");
@@ -64,7 +65,7 @@ public class UserModel {
             }
 
             @Override
-            public void onFailure(Call<ArrayList<OpenPostData>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<PostData>> call, Throwable t) {
                 showLoading.setValue(false);
                 fragmentMessage.setValue("Unable to fetch posts");
                 Log.d(LOG_TAG, "getFeedOpenPost onFailure");
@@ -244,16 +245,16 @@ public class UserModel {
     }
 
     public void getUserOpenPost(final String userId, final String token,
-                                final MutableLiveData<ArrayList<OpenPostData>> postData,
+                                final MutableLiveData<ArrayList<PostData>> postData,
                                 final MutableLiveData<Boolean> showLoading, final MutableLiveData<String> fragmentMessage){
         RepoInterface service = RepoClient.getRetrofitInstance().create(RepoInterface.class);
-        Call<ArrayList<OpenPostData>> call = service.getUserOpenPosts(userId, token);
+        Call<ArrayList<PostData>> call = service.getUserOpenPosts(userId, token);
         showLoading.setValue(true);
         fragmentMessage.setValue("Fetching User Open Posts...");
 
-        call.enqueue(new Callback<ArrayList<OpenPostData>>() {
+        call.enqueue(new Callback<ArrayList<PostData>>() {
             @Override
-            public void onResponse(Call<ArrayList<OpenPostData>> call, Response<ArrayList<OpenPostData>> response) {
+            public void onResponse(Call<ArrayList<PostData>> call, Response<ArrayList<PostData>> response) {
                 showLoading.setValue(false);
                 if((!response.isSuccessful()) || (response.code()!=200)) {
                     fragmentMessage.setValue("There is some problem fetching posts");
@@ -273,7 +274,7 @@ public class UserModel {
             }
 
             @Override
-            public void onFailure(Call<ArrayList<OpenPostData>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<PostData>> call, Throwable t) {
                 showLoading.setValue(false);
                 fragmentMessage.setValue("Unable to fetch posts");
                 Log.d(LOG_TAG, "getUserOpenPost onFailure");
@@ -322,6 +323,10 @@ public class UserModel {
     public void deleteAccount(MutableLiveData<Boolean> showLoading, MutableLiveData<String> progressTitle,
                               MutableLiveData<String> toastMessage, MutableLiveData<Boolean> removeUserInfo,
                               MutableLiveData<Boolean> goToLogin) {
+        //ROHAN - need to implement server side
+        toastMessage.setValue("Account deleted NOT SO successfully");
+        removeUserInfo.setValue(true);
+        goToLogin.setValue(true);
     }
 
     //Toggles value of Mutable<Boolean>

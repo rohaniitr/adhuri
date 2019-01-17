@@ -9,7 +9,7 @@ import in.rohansarkar.adhuri.Model.Data.SuggestionData;
 import in.rohansarkar.adhuri.Model.Repositories.PostModel;
 import in.rohansarkar.adhuri.Model.Repositories.UserModel;
 
-public class OpenPostViewModel extends ViewModel {
+public class ViewOpenPostViewModel extends ViewModel {
     private MutableLiveData<ArrayList<SuggestionData>> suggestionList;
     private MutableLiveData<Boolean> showLoading;
     private MutableLiveData<String> fragmentMessage;

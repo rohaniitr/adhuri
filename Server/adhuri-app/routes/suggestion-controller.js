@@ -1,4 +1,4 @@
-var express = require('express');
+  var express = require('express');
 var router = express.Router();
 var bodyParser = require('body-parser');
 var jwt = require('jsonwebtoken');
@@ -43,6 +43,7 @@ router.post('/add', function(req, res){
     });
 });
 
+//Send Suggestor image and name
 router.get('/get/:postId', function(req,res){
   console.log("GetSuggestions : " + req.params.postId);
 
@@ -50,7 +51,7 @@ router.get('/get/:postId', function(req,res){
     return res.status(401).send({ auth: false, message: 'Sorry, you provided wrong info' });
 
   Suggestion.find({postId: req.params.postId})
-  .select('_id content time isAccepted').exec().then(function(suggestions){
+  .select('_id content time isAccepted userId').exec().then(function(suggestions){
     console.log(suggestions);
     return res.status(200).json(suggestions);
   }).catch(function(err){

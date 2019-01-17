@@ -7,22 +7,43 @@
         android:layout_width="match_parent" android:layout_height="wrap_content"
         layout="@layout/toolbar_close_post" android:id="@+id/toolbar"/>
 
+    <RelativeLayout
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:id="@+id/lUserDetails" android:layout_below="@+id/toolbar"
+        android:layout_marginLeft="12sp" android:layout_marginRight="12sp" android:layout_marginTop="12sp">
+        <include
+            android:layout_height="40sp" android:layout_width="40sp"
+            layout="@layout/circular_image_view_40" android:id="@+id/lProfilePic"/>
+        <LinearLayout
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="vertical" android:layout_gravity="center_vertical"
+            android:layout_marginLeft="16sp" android:layout_toRightOf="@+id/lProfilePic">
+            <TextView
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:id="@+id/tvName"
+                android:textSize="16sp" android:textColor="@color/textBlack"/>
+            <TextView
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:id="@+id/tvTime"
+                android:textColor="@color/textOffBlack" android:textSize="12sp"/>
+        </LinearLayout>
+    </RelativeLayout>
+
     <EditText
         android:layout_width="match_parent" android:layout_height="220sp"
         android:id="@+id/etContent" android:background="@color/transparentToolbar"
         android:textColor="@color/textBlack" android:textSize="15sp"
-        android:gravity="center_horizontal" android:text="@string/samples_content_3"
-        android:paddingTop="8sp" android:paddingRight="8sp" android:paddingLeft="8sp"
-        android:layout_below="@+id/toolbar"/>
+        android:gravity="center_horizontal" android:layout_below="@+id/lUserDetails"
+        android:paddingTop="8sp" android:paddingRight="8sp" android:paddingLeft="8sp"/>
 
     <ImageView
         android:layout_width="match_parent" android:layout_height="1sp"
         android:background="@color/alphaBlack" android:id="@+id/ivDivider"
         android:layout_below="@+id/etContent"/>
 
-    <android.support.v7.widget.RecyclerView
+    <include
         android:layout_width="match_parent" android:layout_height="match_parent"
-        android:id="@+id/rvSuggestion" android:paddingTop="8sp"
+        layout="@layout/fragment_recycler_view" android:id="@+id/rvSuggestion" android:paddingTop="8sp"
         android:layout_below="@+id/ivDivider" android:layout_above="@+id/lButton"/>
 
     <LinearLayout
@@ -30,7 +51,7 @@
         android:orientation="horizontal" android:id="@+id/lButton" android:layout_alignParentBottom="true">
         <Button
             android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:id="@+id/bSave" android:layout_marginRight="1sp"
+            android:id="@+id/bSavePost" android:layout_marginRight="1sp"
             android:text="@string/save" android:textAllCaps="true"
             android:textColor="@color/textWhite" android:textSize="15sp"
             android:background="@drawable/button_submit" android:layout_weight="1"/>

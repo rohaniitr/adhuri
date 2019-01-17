@@ -6,10 +6,11 @@ import android.arch.lifecycle.ViewModel;
 import java.util.ArrayList;
 
 import in.rohansarkar.adhuri.Model.Data.OpenPostData;
+import in.rohansarkar.adhuri.Model.Data.PostData;
 import in.rohansarkar.adhuri.Model.Repositories.UserModel;
 
 public class UserOpenPostFeedViewModel extends ViewModel {
-    private MutableLiveData<ArrayList<OpenPostData>> postData;
+    private MutableLiveData<ArrayList<PostData>> postData;
     private MutableLiveData<Boolean> showLoading;
     private MutableLiveData<String> fragmentMessage;
     private UserModel userModel;
@@ -29,8 +30,11 @@ public class UserOpenPostFeedViewModel extends ViewModel {
             userModel = new UserModel();
         userModel.getUserOpenPost(userId, token, postData, showLoading, fragmentMessage);
     }
+    public void deletePost(){
 
-    public MutableLiveData<ArrayList<OpenPostData>> getPostData() {
+    }
+
+    public MutableLiveData<ArrayList<PostData>> getPostData() {
         if(postData == null)
             postData = new MutableLiveData<>();
         return postData;

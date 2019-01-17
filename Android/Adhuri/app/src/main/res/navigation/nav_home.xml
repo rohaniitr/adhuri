@@ -5,6 +5,7 @@
     android:id="@+id/nav_home"
     app:startDestination="@id/homeFragment">
 
+    <!--ROHAN - Remove extra fragments fro here-->
     <fragment
         android:id="@+id/homeFragment"
         android:name="in.rohansarkar.adhuri.View.Fragment.HomeFragment"
@@ -23,8 +24,11 @@
             android:id="@+id/action_homeFragment_to_closePostFragment"
             app:destination="@id/closePostFragment" app:enterAnim="@anim/nav_default_enter_anim" app:exitAnim="@anim/nav_default_exit_anim" app:popEnterAnim="@anim/nav_default_pop_enter_anim" app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
         <action
-            android:id="@+id/action_homeFragment_to_openPostFragment"
-            app:destination="@id/openPostFragment" app:enterAnim="@anim/nav_default_enter_anim" app:exitAnim="@anim/nav_default_exit_anim" app:popEnterAnim="@anim/nav_default_pop_enter_anim" app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
+            android:id="@+id/action_homeFragment_to_viewOpenPostFragment"
+            app:destination="@id/viewOpenPostFragment" app:enterAnim="@anim/nav_default_enter_anim" app:exitAnim="@anim/nav_default_exit_anim" app:popEnterAnim="@anim/nav_default_pop_enter_anim" app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
+        <action
+            android:id="@+id/action_homeFragment_to_editOpenPostFragment"
+            app:destination="@id/editOpenPostFragment" />
     </fragment>
     <fragment
         android:id="@+id/userInfoFragment"
@@ -47,8 +51,13 @@
         android:label="fragment_recycler_view"
         tools:layout="@layout/fragment_recycler_view" />
     <fragment
-        android:id="@+id/openPostFragment"
-        android:name="in.rohansarkar.adhuri.View.Fragment.OpenPostFragment"
+        android:id="@+id/viewOpenPostFragment"
+        android:name="in.rohansarkar.adhuri.View.Fragment.ViewOpenPostFragment"
         android:label="fragment_open_post"
-        tools:layout="@layout/fragment_open_post" />
+        tools:layout="@layout/fragment_view_open_post" />
+    <fragment
+        android:id="@+id/editOpenPostFragment"
+        android:name="in.rohansarkar.adhuri.View.Fragment.EditOpenPostFragment"
+        android:label="fragment_edit_open_post"
+        tools:layout="@layout/fragment_edit_open_post" />
 </navigation>

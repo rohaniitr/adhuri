@@ -66,7 +66,7 @@ public class UserClosePostFeedAdapter extends RecyclerView.Adapter<UserClosePost
         View.OnClickListener showOpenPostListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                navController.navigate(R.id.action_homeFragment_to_openPostFragment);
+                navController.navigate(R.id.action_homeFragment_to_viewOpenPostFragment);
             }
         };
         myViewHolder.tvContent.setOnClickListener(showOpenPostListener);
@@ -98,7 +98,7 @@ public class UserClosePostFeedAdapter extends RecyclerView.Adapter<UserClosePost
             tvTag = itemView.findViewById(R.id.tvTag);
             tvTime = itemView.findViewById(R.id.tvTime);
             tvContent = itemView.findViewById(R.id.tvContent);
-            tvSuggestionCount = itemView.findViewById(R.id.tvSuggestionCount);
+            tvSuggestionCount = itemView.findViewById(R.id.tvCollabCount);
             ivCollab = itemView.findViewById(R.id.ivCircularImage);
         }
     }

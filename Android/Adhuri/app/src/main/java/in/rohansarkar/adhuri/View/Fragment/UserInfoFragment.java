@@ -8,7 +8,6 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -34,6 +33,8 @@ import in.rohansarkar.adhuri.R;
 import in.rohansarkar.adhuri.Util.PrefUtil;
 import in.rohansarkar.adhuri.Util.Util;
 import in.rohansarkar.adhuri.View.Activity.VerificationActivity;
+import in.rohansarkar.adhuri.View.Utils.CustomAlertAction;
+import in.rohansarkar.adhuri.View.Utils.CustomAlertBox;
 import in.rohansarkar.adhuri.ViewModel.UserInfoViewModel;
 
 import static android.app.Activity.RESULT_OK;
@@ -68,13 +69,14 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
         super.onActivityResult(requestCode, resultCode, data);
         try {
             if (resultCode == RESULT_OK && requestCode== REQUEST_GET_IMAGE) {
-                Bundle extras2 = data.getExtras();
-                if (extras2 != null) {
-                    Bitmap photo = extras2.getParcelable("data");
+                Bundle extras = data.getExtras();
+                if (extras != null) {
+                    Bitmap photo = extras.getParcelable("data");
                     viewModel.uploadImage(getActivity(), photo, userInfo.getToken());
                 }
                 else
                     showToast("NULL");
+                //ROHAN - Need to take care of this case
 //                Uri selectedImageUri = data.getData();
 //                if (null != selectedImageUri) {
 //                    String path = getPathFromURI(selectedImageUri);
@@ -100,10 +102,10 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
                         etBio.getText().toString().trim(), userInfo.getToken());
                 break;
             case R.id.bLogout:
-                viewModel.logout();
+                launchLogoutAlert();
                 break;
             case R.id.bDeleteAccount:
-                viewModel.deleteAccount();
+                launchDeleteAccountAlert();
                 break;
             case R.id.ivBack:
                 navController.popBackStack();
@@ -195,6 +197,46 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sGender.setAdapter(dataAdapter);
     }
+    //Launches Logout AlertBox
+    private void launchLogoutAlert(){
+        CustomAlertBox alertBox = new CustomAlertBox();
+        Bundle bundle = new Bundle();
+        bundle.putInt(getString(R.string.alert_title_id), R.string.logout);
+        bundle.putInt(getString(R.string.alert_icon_id), R.drawable.icon_logout);
+        bundle.putInt(getString(R.string.alert_message_id), R.string.logout_alert_content);
+        bundle.putSerializable(getString(R.string.alert_action_object), new CustomAlertAction() {
+            @Override
+            public void onSuccess() {
+                viewModel.logout();
+            }
+            @Override
+            public void onError() {
+
+            }
+        });
+        alertBox.setArguments(bundle);
+        alertBox.show(getActivity().getSupportFragmentManager(), null);
+    }
+    //Launches Delete Account AlertBox
+    private void launchDeleteAccountAlert(){
+        CustomAlertBox alertBox = new CustomAlertBox();
+        Bundle bundle = new Bundle();
+        bundle.putInt(getString(R.string.alert_title_id), R.string.delete_account);
+        bundle.putInt(getString(R.string.alert_icon_id), R.drawable.icon_delete);
+        bundle.putInt(getString(R.string.alert_message_id), R.string.delete_account_alert_content);
+        bundle.putSerializable(getString(R.string.alert_action_object), new CustomAlertAction() {
+            @Override
+            public void onSuccess() {
+                viewModel.deleteAccount();
+            }
+            @Override
+            public void onError() {
+
+            }
+        });
+        alertBox.setArguments(bundle);
+        alertBox.show(getActivity().getSupportFragmentManager(), null);
+    }
     private void fillData() {
         if(userInfo ==null)
             return;
@@ -207,7 +249,7 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
 
         updateImage();
     }
-    //Updates image from USER_IMAGE_NAME
+    //Updates image from USER_ IMAGE_NAME
     private void updateImage() {
         File file = new File(getActivity().getFilesDir(), USER_IMAGE_NAME);
         if(file.exists()) {

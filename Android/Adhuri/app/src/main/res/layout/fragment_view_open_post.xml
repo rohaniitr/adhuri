@@ -47,10 +47,6 @@
         android:layout_width="match_parent" android:layout_height="match_parent"
         layout="@layout/fragment_recycler_view" android:id="@+id/rvSuggestion" android:paddingTop="8sp"
         android:layout_below="@id/ivContentDivider" android:layout_above="@+id/ivSuggestionDivider"/>
-    <!--<android.support.v7.widget.RecyclerView-->
-        <!--android:layout_width="match_parent" android:layout_height="wrap_content"-->
-        <!--android:id="@+id/rvSuggestion" android:paddingTop="8sp"-->
-        <!--android:layout_below="@id/ivContentDivider" android:layout_above="@+id/ivSuggestionDivider"/>-->
 
     <ImageView
         android:layout_width="match_parent" android:layout_height="1sp"
